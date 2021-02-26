@@ -1,0 +1,11 @@
+TensorFlow.js
+1. https://www.youtube.com/watch?v=CM92pIh1Unw
+2. https://www.youtube.com/watch?v=3MqJzMvHE3E
+
+
+https://www.tensorflow.org/js/guide/nodejs
+https://levelup.gitconnected.com/build-ad-dog-classifier-with-react-and-tensorflow-js-in-minutes-f08e98608a65
+https://experiments.withgoogle.com/collection/ai
+https://teachablemachine.withgoogle.com/
+https://www.npmjs.com/package/ml5
+https://p5js.org/
