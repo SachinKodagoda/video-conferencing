@@ -1,56 +1,21 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "typescript.format.enable": false,
-    "typescript.implementationsCodeLens.enabled": true,
-    "javascript.validate.enable": false,
-    "javascript.format.enable": false,
-    "files.insertFinalNewline": true,
-    "editor.renderWhitespace": "all",
-    "editor.tabSize": 4,
-    "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": false,
-        "source.fixAll.eslint": true,
-        "eslint.autoFixOnSave": true,
-    },
-    "[javascript]": {
-        "editor.formatOnSave": false,
-    },
-    "[javascriptreact]": {
-        "editor.formatOnSave": true,
-    },
-    "[typescript]": {
-        "editor.formatOnSave": false,
-    },
-    "[typescriptreact]": {
-        "editor.formatOnSave": true,
-    },
-    "editor.trimAutoWhitespace": true,
-    "editor.wordWrap": "on",
-    "workbench.editor.revealIfOpen": true,
+  "search.exclude": {
+    "**/.dev_assets/**": true,
+    "**/.git/**": true,
+    "**/.github/**": true,
+    "**/.next/**": true,
+    "**/.vscode/**": true,
+    "**/build/**": true,
+    "**/node_modules/**": true
+  },
 
-    "files.eol": "\n",
-    "files.encoding": "utf8",
-    "files.trimFinalNewlines": true,
-    "files.trimTrailingWhitespace": true,
-
-    "search.exclude": {
-        "**/.dev_assets/**": true,
-        "**/.git/**": true,
-        "**/.github/**": true,
-        "**/.next/**": true,
-        "**/.vscode/**": true,
-        "**/build/**": true,
-        "**/node_modules/**": true
-    },
-
-    "files.watcherExclude": {
-        "**/.dev_assets/**": true,
-        "**/.git/**": true,
-        "**/.github/**": true,
-        "**/.next/**": true,
-        "**/.vscode/**": true,
-        "**/build/**": true,
-        "**/node_modules/**": true
-    },
+  "files.watcherExclude": {
+    "**/.dev_assets/**": true,
+    "**/.git/**": true,
+    "**/.github/**": true,
+    "**/.next/**": true,
+    "**/.vscode/**": true,
+    "**/build/**": true,
+    "**/node_modules/**": true
+  }
 }

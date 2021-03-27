@@ -1,6 +1,9 @@
+import "../styles/common/normalize.css";
+import "../styles/common/global.css";
+import { AppProps } from "next/app";
 import Head from "next/head";
 
-const MainLayout = (props: HTMLElement) => {
+function MyApp({ Component, pageProps }: AppProps): React.ReactElement {
   return (
     <>
       <Head>
@@ -44,9 +47,9 @@ const MainLayout = (props: HTMLElement) => {
           rel="stylesheet"
         />
       </Head>
-      {props.children}
+      <Component {...pageProps} />
     </>
   );
-};
+}
 
-export default MainLayout;
+export default MyApp;
