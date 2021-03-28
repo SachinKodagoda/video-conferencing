@@ -1,9 +1,16 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import * as tf from "@tensorflow/tfjs";
+import * as handpose from "@tensorflow-models/handpose";
+import Webcam from "react-webcam";
+import { drawHand } from "../components/utilities";
+import "@tensorflow/tfjs-backend-webgl";
 
 const Body = (): JSX.Element => {
   const [threeMenuOn, setThreeMenuOn] = useState(false);
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
+  const webcamRef = useRef<Webcam | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [streaming, setStreaming] = useState(false);
   const [videoOn, setVideoOn] = useState(false);
@@ -11,7 +18,6 @@ const Body = (): JSX.Element => {
 
   const [showLeftBar, setShowLeftBar] = useState(true);
   const [showRightBar, setShowRightBar] = useState(true);
-  const videoObjectRef = useRef<null | HTMLVideoElement>(null);
 
   const threeMenuIcon = threeMenuOn ? "3dActive" : "3d";
   const settingsMenuIcon = settingsMenuOn ? "settingsActive" : "settings";
@@ -34,31 +40,44 @@ const Body = (): JSX.Element => {
     },
   ];
 
-  const startVideo = () => {
-    setVideoOn(true);
-    navigator.getUserMedia(
-      {
-        video: true,
-      },
-      (stream) => {
-        if (videoObjectRef) {
-          const { current } = videoObjectRef;
-          const videoElement = (current as unknown) as HTMLMediaElement;
-          videoElement.srcObject = stream;
-        }
-      },
-      (err) => console.error(err)
-    );
+  const runHandpose = async () => {
+    const net = await handpose.load();
+    console.log("Handpose model loaded.");
+    //  Loop and detect hands
+    setInterval(() => {
+      detect(net);
+    }, 10);
   };
 
-  const stopVideo = () => {
-    setVideoOn(false);
-    if (videoObjectRef) {
-      const { current } = videoObjectRef;
-      const videoElement = (current as unknown) as HTMLMediaElement;
-      (videoElement.srcObject as MediaStream)?.getTracks()[0].stop();
+  const detect = async (net: any) => {
+    const videoReference = webcamRef?.current?.video as HTMLVideoElement;
+    const canvasReference = canvasRef?.current as HTMLCanvasElement;
+    if (
+      typeof webcamRef.current !== "undefined" &&
+      webcamRef.current !== null &&
+      videoReference.readyState === 4 &&
+      net
+    ) {
+      //Get video properties
+      const videoWidth = videoReference.videoWidth;
+      const videoHeight = videoReference.videoHeight;
+      //Set video width
+      videoReference.width = videoWidth;
+      videoReference.height = videoHeight;
+      //Set canvas height
+      canvasReference.width = videoWidth;
+      canvasReference.height = videoHeight;
+      // Make Detections
+      const hand = await net.estimateHands(videoReference);
+      // Draw mesh
+      const ctx = canvasReference.getContext("2d");
+      drawHand(hand, ctx);
     }
   };
+
+  useEffect(() => {
+    runHandpose();
+  }, []);
 
   return (
     <Container showLeftBar={showLeftBar} streaming={streaming}>
@@ -83,12 +102,10 @@ const Body = (): JSX.Element => {
 
           <div className="videoMenuMiddle">
             {videoOn ? (
-              <video
-                muted
-                autoPlay
-                className="videoObject"
-                ref={videoObjectRef}
-              />
+              <>
+                <Webcam ref={webcamRef} className="videoObject" />
+                <canvas ref={canvasRef} className="canvasObject" />
+              </>
             ) : (
               <div className="videoPlaceholder">
                 <div className="userName">Duminda Kodagoda</div>
@@ -150,12 +167,7 @@ const Body = (): JSX.Element => {
             className="iconBottomBar"
             onClick={() => {
               const tempState = videoOn;
-              if (tempState) {
-                stopVideo();
-              } else {
-                startVideo();
-              }
-              setVideoOn(!videoOn);
+              setVideoOn(!tempState);
             }}
           />
           <img
@@ -257,6 +269,7 @@ const Container = styled.div<TContainerProps>`
       align-items: center;
       justify-content: center;
       border-radius: 10px;
+      position: relative;
       .videoObject {
         width: 100% !important;
         height: auto !important;
@@ -272,6 +285,13 @@ const Container = styled.div<TContainerProps>`
         flex-direction: column;
         color: #fff;
         font-size: 3rem;
+      }
+
+      .canvasObject {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform: scaleX(-1);
       }
     }
     .videoMenuRight {
