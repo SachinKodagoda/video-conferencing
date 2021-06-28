@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import styles from '@pages_style/design.module.sass';
+import styles from '@pages_style/index.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
 import { drawHand } from '@util/utilities';
@@ -133,36 +133,35 @@ const Index = (): JSX.Element => {
       </div>
       <div className={styles.bottomBar}>
         <div className={styles.left}>
-          <span
-            className={styles.hoverIconCover}
+          <img
+            src={`/images/${threeMenuIcon}.svg`}
+            alt=''
+            className={styles.leftIcons}
             onMouseEnter={() => {
               setThreeMenuOn(true);
             }}
             onMouseLeave={() => {
               setThreeMenuOn(false);
-            }}>
-            <img src={`/images/${threeMenuIcon}.svg`} alt='' className='iconBottomBar' />
-          </span>
-          <span className={styles.hoverIconCover}>
-            <img
-              src={`/images/${settingsMenuIcon}.svg`}
-              alt=''
-              className={styles.iconBottomBar}
-              onMouseEnter={() => {
-                setSettingsMenuOn(true);
-              }}
-              onMouseLeave={() => {
-                setSettingsMenuOn(false);
-              }}
-              aria-hidden='true'
-            />
-          </span>
+            }}
+          />
+          <img
+            src={`/images/${settingsMenuIcon}.svg`}
+            alt=''
+            className={styles.leftIcons}
+            onMouseEnter={() => {
+              setSettingsMenuOn(true);
+            }}
+            onMouseLeave={() => {
+              setSettingsMenuOn(false);
+            }}
+            aria-hidden='true'
+          />
         </div>
-        <div className='middle'>
+        <div className={styles.middle}>
           <img
             src={`/images/${videoIcon}.svg`}
             alt=''
-            className={styles.iconBottomBar}
+            className={styles.middleIcons}
             onClick={() => {
               const tempState = videoOn;
               setVideoOn(!tempState);
@@ -172,7 +171,7 @@ const Index = (): JSX.Element => {
           <img
             src={`/images/${streamingIcon}.svg`}
             alt=''
-            className={styles.iconBottomBar}
+            className={styles.middleIcons}
             onClick={() => {
               setStreaming(!streaming);
             }}
@@ -181,18 +180,18 @@ const Index = (): JSX.Element => {
           <img
             src={`/images/${microphoneIcon}.svg`}
             alt=''
-            className={styles.iconBottomBar}
+            className={styles.middleIcons}
             onClick={() => {
               setMicrophoneOn(!microphoneOn);
             }}
             aria-hidden='true'
           />
         </div>
-        <div className='right'>
+        <div className={styles.right}>
           <img
             src={`/images/${usersIcon}.svg`}
             alt=''
-            className={styles.iconBottomBar}
+            className={styles.rightIcons}
             onClick={() => {
               setShowLeftBar(!showLeftBar);
             }}
@@ -201,7 +200,7 @@ const Index = (): JSX.Element => {
           <img
             src={`/images/${messageIcon}.svg`}
             alt=''
-            className={styles.iconBottomBar}
+            className={styles.rightIcons}
             onClick={() => {
               setShowRightBar(!showRightBar);
             }}

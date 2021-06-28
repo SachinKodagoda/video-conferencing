@@ -1,12 +1,10 @@
 @import './common/_util'
 
-$bottomBarHeight = 60px
-
 .container
-  background: #000
+  background: $black1
 
 .videoContainer
-  height: calc(100vh - $bottomBarHeight)
+  height: calc(100vh - 60px)
   padding: 20px
 
 .videoContainerInner
@@ -26,21 +24,18 @@ $bottomBarHeight = 60px
   display: flex
   flex-direction: column
   overflow-y: scroll
-
-.videoMenuLeft::-webkit-scrollbar
-  display: none
-
-.videoMenuLeft
-  -ms-overflow-style: none
-  scrollbar-width: none
+  &::-webkit-scrollbar
+    display: none
+    -ms-overflow-style: none
+    scrollbar-width: none
 
 .videoItem
   flex-shrink: 0
   flex-grow: 0
   width: 100%
   height: 200px
-  color: #fff
-  background: #333
+  color: $white
+  background: $black2
   border-radius: 10px
   margin-bottom: 10px
   display: flex
@@ -67,14 +62,14 @@ $bottomBarHeight = 60px
   transform: scaleX(-1)
 
 .videoPlaceholder
-  background: #444
+  background: $black3
   width: 100%
   height: 100%
   display: flex
   align-items: center
   justify-content: center
   flex-direction: column
-  color: #fff
+  color: $white
   font-size: 3rem
 
 .canvasObject
@@ -86,7 +81,7 @@ $bottomBarHeight = 60px
 .videoMenuRight
   flex-grow: 0
   flex-shrink: 0
-  background: #333
+  background: $black2
   width: 300px
   height: 100%
   border-radius: 10px
@@ -107,33 +102,33 @@ $bottomBarHeight = 60px
   display: inline-block
   margin-bottom: 15px
   border-radius: 10px 20px 20px 0px
-  color: #fff
-  background: #666
+  color: $white
+  background: $black4
   padding: 0.5em 1em
   font-weight: 900
 
 .chatInput
   flex-grow: 0
   flex-shrink: 0
-  border-top: 10px solid #000 !important
+  border-top: 10px solid $black !important
 
-.videoMenuRightItem
+.chatInputItem
   opacity: 1
   border: none
   outline: none
   width: 100%
   padding: 0.8em
-  background: #444 !important
+  background: $black3!important
   background-image: none !important
   border-radius: 0 0 10px 10px
   font-size: 18px
-  color: #fff
+  color: $white
   font-weight: 900
 
 .bottomBar
   width: 100%
-  height: $bottomBarHeight
-  background: #333
+  height: 60px
+  background: $black2
   display: flex
   align-items: center
   justify-content: center
@@ -143,31 +138,41 @@ $bottomBarHeight = 60px
   cursor: pointer
   height: 40px
   width: auto
-  margin: 0 10px
 
 .left
   flex-grow: 1
+  display: flex
+  align-items: center
+  justify-content: flex-start
+  column-gap: 20px
 
-.hoverIconCover
-  display: inline-block
-  margin: 0 10px
-
-.iconBottomBar
-  margin: 0
+.leftIcons
+  cursor: pointer
+  height: 30px
+  width: auto
 
 .middle
   display: flex
   align-items: center
   justify-content: center
-  background: #000
+  background: $black1
   padding: 10px 20px
   border-radius: 10px
+  column-gap: 20px
 
-.iconBottomBar
+.middleIcons
   height: 30px
+  width: auto
+  cursor: pointer
 
 .right
   flex-grow: 1
   display: flex
   align-items: center
   justify-content: flex-end
+  column-gap: 20px
+
+.rightIcons
+  cursor: pointer
+  height: 30px
+  width: auto
