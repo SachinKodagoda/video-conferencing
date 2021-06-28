@@ -1,55 +1,33 @@
-import "../styles/common/normalize.css";
-import "../styles/common/global.css";
-import { AppProps } from "next/app";
-import Head from "next/head";
+import { CartContextProvider } from '@ctx/CartContext';
+import { UserContextProvider } from '@ctx/UserContext';
+import '@styles/globals.sass';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import React from 'react';
 
-function MyApp({ Component, pageProps }: AppProps): React.ReactElement {
+const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => {
   return (
     <>
       <Head>
-        <meta charSet="UTF-8" />
-        <title>{process.env.appName}</title>
+        <meta charSet='UTF-8' />
+        <title>{process.env.APP_NAME}</title>
         <meta
-          name="viewport"
-          content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=no, shrink-to-fit=no"
+          name='viewport'
+          content='width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=no, shrink-to-fit=no'
         />
-        <meta name="author" content="Sachin Kodagoda" />
-        <meta name="keywords" content="Niro International" />
-        <meta
-          name="description"
-          content="Job vacancy and Srilankan products selling"
-        />
-        <meta name="theme-color" content="#000" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="#000" />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Abel&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Galada&display=swap"
-          rel="stylesheet"
-        />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css?family=Arima+Madurai&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css?family=Montserrat:600&display=swap"
-          rel="stylesheet"
-        />
+        <meta name='author' content='Duminda Kodagoda' />
+        <meta name='keywords' content='Davinci Arts' />
+        <meta name='description' content='Art for everyone' />
+        <meta name='theme-color' content='#000' />
+        <meta name='apple-mobile-web-app-status-bar-style' content='#000' />
       </Head>
-      <Component {...pageProps} />
+      <UserContextProvider>
+        <CartContextProvider>
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <Component {...pageProps} />
+        </CartContextProvider>
+      </UserContextProvider>
     </>
   );
-}
-
+};
 export default MyApp;

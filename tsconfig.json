@@ -1,33 +1,46 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["dom", "es7"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "plugins": [
-      {
-        "name": "@typescript-eslint"
-      }
-    ],
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "es5"
+    "target": "es5",
+    "allowSyntheticDefaultImports": true, // me
+    "importHelpers": true, // me
+    "noImplicitAny": true, // me
+    "noImplicitReturns": true, // me
+    "noImplicitThis": true, // me
+    "noUnusedLocals": true, // me
+    "suppressImplicitAnyIndexErrors": true, // me
+    "baseUrl": ".", //me
+    "paths": {
+      "@components_style/*": ["styles/ui/components/*"],
+      "@components/*": ["src/common/ui/components/*"],
+      "@ctx/*": ["src/common/ctx/*"],
+      "@data/*": ["src/common/data/*"],
+      "@hooks/*": ["src/common/hooks/*"],
+      "@images/*": ["public/images/*"],
+      "@layouts_style/*": ["styles/ui/layouts/*"],
+      "@layouts/*": ["src/common/ui/layouts/*"],
+      "@lib/*": ["src/common/lib/*"],
+      "@pages_style/*": ["styles/*"],
+      "@styles/*": ["styles/*"],
+      "@svg/*": ["src/common/svg/*"],
+      "@translations/*": ["src/common/translations/*"],
+      "@ts/*": ["src/common/ts/*"],
+      "@util/*": ["src/common/util/*"],
+      "@public/*": ["public/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".github", ".vscode"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
