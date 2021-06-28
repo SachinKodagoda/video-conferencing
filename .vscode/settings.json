@@ -17,5 +17,9 @@
     "**/.vscode/**": true,
     "**/build/**": true,
     "**/node_modules/**": true
-  }
+  },
+  "cSpell.words": [
+    "handpose",
+    "tfjs"
+  ]
 }
