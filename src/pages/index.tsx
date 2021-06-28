@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import styles from '@pages_style/design.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
@@ -41,7 +42,8 @@ const Index = (): JSX.Element => {
 
   const runHandpose = async () => {
     const net = await handpose.load();
-    console.log('Handpose model loaded.');
+    // eslint-disable-next-line no-console
+    console.log('Handpose model loaded.=-->');
     //  Loop and detect hands
     setInterval(() => {
       detect(net);
@@ -76,61 +78,63 @@ const Index = (): JSX.Element => {
 
   useEffect(() => {
     runHandpose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
-    <div showLeftBar={showLeftBar} streaming={streaming} className={styles.container}>
-      <div className='videoContainer'>
-        <div className='videoContainerInner'>
+    <div className={styles.container}>
+      <div className={styles.videoContainer}>
+        <div className={styles.videoContainerInner}>
           {showLeftBar && (
-            <div className='videoMenuLeft'>
-              <div className='videoItem'>D.G.Kodagoda</div>
-              <div className='videoItem'>Y.Abinaya</div>
-              <div className='videoItem'>Y.R.Kodagoda</div>
-              <div className='videoItem'>S.Kodagoda</div>
-              <div className='videoItem'>I.Kumarasinghe</div>
-              <div className='videoItem'>Thilina</div>
-              <div className='videoItem'>User1</div>
-              <div className='videoItem'>User2</div>
-              <div className='videoItem'>User3</div>
-              <div className='videoItem'>User4</div>
-              <div className='videoItem'>User5</div>
-              <div className='videoItem'>User6</div>
+            <div className={styles.videoMenuLeft}>
+              <div className={styles.videoItem}>D.G.Kodagoda</div>
+              <div className={styles.videoItem}>Y.Abinaya</div>
+              <div className={styles.videoItem}>Y.R.Kodagoda</div>
+              <div className={styles.videoItem}>S.Kodagoda</div>
+              <div className={styles.videoItem}>I.Kumarasinghe</div>
+              <div className={styles.videoItem}>Thilina</div>
+              <div className={styles.videoItem}>User1</div>
+              <div className={styles.videoItem}>User2</div>
+              <div className={styles.videoItem}>User3</div>
+              <div className={styles.videoItem}>User4</div>
+              <div className={styles.videoItem}>User5</div>
+              <div className={styles.videoItem}>User6</div>
             </div>
           )}
 
-          <div className='videoMenuMiddle'>
+          <div className={styles.videoMenuMiddle} style={{ marginLeft: showLeftBar ? '20px' : '0px' }}>
             {videoOn ? (
               <>
-                <Webcam ref={webcamRef} className='videoObject' />
-                <canvas ref={canvasRef} className='canvasObject' />
+                <Webcam ref={webcamRef} className={styles.videoObject} />
+                <canvas ref={canvasRef} className={styles.canvasObject} />
               </>
             ) : (
-              <div className='videoPlaceholder'>
-                <div className='userName'>Duminda Kodagoda</div>
-                <div className='userMessage'>Your video is off!</div>
+              <div className={styles.videoPlaceholder}>
+                <div className={styles.userName}>Duminda Kodagoda</div>
+                <div className={styles.userMessage}>Your video is off!</div>
               </div>
             )}
           </div>
           {showRightBar && (
-            <div className='videoMenuRight'>
-              <div className='chatItemCover'>
+            <div className={styles.videoMenuRight}>
+              <div className={styles.chatItemCover}>
                 {messageArray.map((item, index) => (
-                  <div className='chatItem' key={`chatItem-${index + 1}`}>
+                  <div key={`chatItem-${index + 1}`} className={styles.chatItem}>
                     {item.message}
                   </div>
                 ))}
               </div>
-              <div className='chatInput'>
-                <input type='text' className='chatInputItem' />
+              <div className={styles.chatInput}>
+                <input type='text' className={styles.chatInputItem} />
               </div>
             </div>
           )}
         </div>
       </div>
-      <div className='bottomBar'>
-        <div className='left'>
+      <div className={styles.bottomBar}>
+        <div className={styles.left}>
           <span
-            className='hoverIconCover'
+            className={styles.hoverIconCover}
             onMouseEnter={() => {
               setThreeMenuOn(true);
             }}
@@ -139,17 +143,18 @@ const Index = (): JSX.Element => {
             }}>
             <img src={`/images/${threeMenuIcon}.svg`} alt='' className='iconBottomBar' />
           </span>
-          <span className='hoverIconCover'>
+          <span className={styles.hoverIconCover}>
             <img
               src={`/images/${settingsMenuIcon}.svg`}
               alt=''
-              className='iconBottomBar'
+              className={styles.iconBottomBar}
               onMouseEnter={() => {
                 setSettingsMenuOn(true);
               }}
               onMouseLeave={() => {
                 setSettingsMenuOn(false);
               }}
+              aria-hidden='true'
             />
           </span>
         </div>
@@ -157,45 +162,50 @@ const Index = (): JSX.Element => {
           <img
             src={`/images/${videoIcon}.svg`}
             alt=''
-            className='iconBottomBar'
+            className={styles.iconBottomBar}
             onClick={() => {
               const tempState = videoOn;
               setVideoOn(!tempState);
             }}
+            aria-hidden='true'
           />
           <img
             src={`/images/${streamingIcon}.svg`}
             alt=''
-            className='iconBottomBar'
+            className={styles.iconBottomBar}
             onClick={() => {
               setStreaming(!streaming);
             }}
+            aria-hidden='true'
           />
           <img
             src={`/images/${microphoneIcon}.svg`}
             alt=''
-            className='iconBottomBar'
+            className={styles.iconBottomBar}
             onClick={() => {
               setMicrophoneOn(!microphoneOn);
             }}
+            aria-hidden='true'
           />
         </div>
         <div className='right'>
           <img
             src={`/images/${usersIcon}.svg`}
             alt=''
-            className='iconBottomBar'
+            className={styles.iconBottomBar}
             onClick={() => {
               setShowLeftBar(!showLeftBar);
             }}
+            aria-hidden='true'
           />
           <img
             src={`/images/${messageIcon}.svg`}
             alt=''
-            className='iconBottomBar'
+            className={styles.iconBottomBar}
             onClick={() => {
               setShowRightBar(!showRightBar);
             }}
+            aria-hidden='true'
           />
         </div>
       </div>

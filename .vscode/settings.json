@@ -19,6 +19,9 @@
     "**/node_modules/**": true
   },
   "cSpell.words": [
+    "Abinaya",
+    "Kumarasinghe",
+    "Thilina",
     "handpose",
     "tfjs"
   ]
