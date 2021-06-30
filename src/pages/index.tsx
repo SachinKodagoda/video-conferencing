@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import styles from '@pages_style/index.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
@@ -42,15 +41,13 @@ const Index = (): JSX.Element => {
 
   const runHandpose = async () => {
     const net = await handpose.load();
-    // eslint-disable-next-line no-console
-    console.log('Handpose model loaded.=-->');
     //  Loop and detect hands
     setInterval(() => {
       detect(net);
     }, 10);
   };
 
-  const detect = async (net: any) => {
+  const detect = async (net: handpose.HandPose) => {
     const videoReference = webcamRef?.current?.video as HTMLVideoElement;
     const canvasReference = canvasRef?.current as HTMLCanvasElement;
     if (
@@ -72,7 +69,9 @@ const Index = (): JSX.Element => {
       const hand = await net.estimateHands(videoReference);
       // Draw mesh
       const ctx = canvasReference.getContext('2d');
-      drawHand(hand, ctx);
+      if (ctx) {
+        drawHand(hand, ctx);
+      }
     }
   };
 

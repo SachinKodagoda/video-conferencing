@@ -25,3 +25,22 @@ export type TMenuItemArr = {
   name: TMenuItem;
   icon: string;
 }[];
+
+type TNumberArr = [number, number, number, number];
+type TLandmarks = [number, number, number];
+export type THand = [
+  annotations: {
+    indexFinger: TNumberArr[];
+    middleFinger: TNumberArr[];
+    palmBase: TNumberArr[];
+    pinky: TNumberArr[];
+    ringFinger: TNumberArr[];
+    thumb: TNumberArr[];
+  },
+  boundingBox: {
+    bottomRight: [number, number];
+    topLeft: [number, number];
+  },
+  handInViewConfidence: number,
+  landmarks: TLandmarks
+];

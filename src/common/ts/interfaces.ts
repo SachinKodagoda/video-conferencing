@@ -6,3 +6,11 @@ export interface IHtmlSelectedElement {
 export interface IHtmlInputElement {
   target: HTMLInputElement;
 }
+
+export interface IHTMLVideoElement {
+  target: HTMLVideoElement;
+}
+
+export interface IHTMLCanvasElement {
+  target: HTMLCanvasElement;
+}

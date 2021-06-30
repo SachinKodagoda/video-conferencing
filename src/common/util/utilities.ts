@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { AnnotatedPrediction } from '@tensorflow-models/handpose';
+
 type TFingerJoints = {
   thumb: number[];
   indexFinger: number[];
@@ -21,33 +21,33 @@ const fingerJoints: TFingerJoints = {
 const style = {
   0: { color: 'yellow', size: 15 },
   1: { color: 'gold', size: 6 },
-  2: { color: 'green', size: 10 },
+  2: { color: 'green', size: 10 }, // green
   3: { color: 'gold', size: 6 },
   4: { color: 'gold', size: 6 },
-  5: { color: 'purple', size: 10 },
+  5: { color: 'purple', size: 10 }, // purple
   6: { color: 'gold', size: 6 },
   7: { color: 'gold', size: 6 },
   8: { color: 'gold', size: 6 },
-  9: { color: 'blue', size: 10 },
+  9: { color: 'blue', size: 10 }, // blue
   10: { color: 'gold', size: 6 },
   11: { color: 'gold', size: 6 },
   12: { color: 'gold', size: 6 },
-  13: { color: 'red', size: 10 },
+  13: { color: 'red', size: 10 }, // red
   14: { color: 'gold', size: 6 },
   15: { color: 'gold', size: 6 },
   16: { color: 'gold', size: 6 },
-  17: { color: 'orange', size: 10 },
+  17: { color: 'orange', size: 10 }, // orange
   18: { color: 'gold', size: 6 },
   19: { color: 'gold', size: 6 },
   20: { color: 'gold', size: 6 },
 };
 
 // Drawing function
-export const drawHand = (predictions: any, ctx: any): void => {
+export const drawHand = (predictions: AnnotatedPrediction[], ctx: CanvasRenderingContext2D): void => {
   // Check if we have predictions
   if (predictions.length > 0) {
     // Loop through each prediction
-    predictions.forEach((prediction: any) => {
+    predictions.forEach((prediction: AnnotatedPrediction) => {
       // Grab landmarks
       const { landmarks } = prediction;
 
@@ -84,6 +84,14 @@ export const drawHand = (predictions: any, ctx: any): void => {
         ctx.fillStyle = style[i].color;
         ctx.fill();
       }
+
+      // center of the palm
+      const xMidSum = landmarks[0][0] + landmarks[5][0] + landmarks[17][0];
+      const yMidSum = landmarks[0][1] + landmarks[5][1] + landmarks[17][1];
+      ctx.beginPath();
+      ctx.arc(xMidSum / 3, yMidSum / 3, 10, 0, 3 * Math.PI);
+      ctx.fillStyle = 'red';
+      ctx.fill();
     });
   }
 };
