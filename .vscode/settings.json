@@ -23,6 +23,7 @@
     "Kumarasinghe",
     "Thilina",
     "handpose",
-    "tfjs"
+    "tfjs",
+    "unproject"
   ]
 }

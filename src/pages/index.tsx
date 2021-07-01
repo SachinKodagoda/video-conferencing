@@ -1,10 +1,9 @@
+import Three from '@components/Three';
 import styles from '@pages_style/index.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
-import { drawHand } from '@util/utilities';
 import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
-import * as THREE from 'three';
 
 const Index = (): JSX.Element => {
   const [threeMenuOn, setThreeMenuOn] = useState(false);
@@ -28,6 +27,8 @@ const Index = (): JSX.Element => {
 
   const usersIcon = showLeftBar ? 'groupActive' : 'group';
   const messageIcon = showRightBar ? 'messageActive' : 'message';
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
 
   const messageArray = [
     {
@@ -71,22 +72,28 @@ const Index = (): JSX.Element => {
       // Draw mesh
       const ctx = canvasReference.getContext('2d');
       if (ctx) {
-        drawHand(hand, ctx);
+        // drawHand(hand, ctx);
+        if (hand.length > 0) {
+          const predicted = hand[0].landmarks;
+          if (predicted.length > 0) {
+            const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0];
+            const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1];
+            const xVal = parseFloat((xMidSum / 3).toFixed(4));
+            const yVal = parseFloat((yMidSum / 3).toFixed(4));
+            ctx.beginPath();
+            ctx.arc(xVal, yVal, 10, 0, 3 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            setX(xVal);
+            setY(yVal);
+          }
+        }
       }
     }
   };
 
   useEffect(() => {
     runHandpose();
-    // Scene, camera, and renderer
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-    setPages({ scene, camera, renderer });
-    camera.position.z = 60;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -116,6 +123,7 @@ const Index = (): JSX.Element => {
               <>
                 <Webcam ref={webcamRef} className={styles.videoObject} />
                 <canvas ref={canvasRef} className={styles.canvasObject} />
+                <Three x={x} y={y} />
               </>
             ) : (
               <div className={styles.videoPlaceholder}>

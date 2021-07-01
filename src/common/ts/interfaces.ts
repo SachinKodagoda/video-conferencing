@@ -7,10 +7,15 @@ export interface IHtmlInputElement {
   target: HTMLInputElement;
 }
 
-export interface IHTMLVideoElement {
+export interface IHtmlVideoElement {
   target: HTMLVideoElement;
 }
 
-export interface IHTMLCanvasElement {
+export interface IHtmlCanvasElement {
   target: HTMLCanvasElement;
+}
+
+export interface IHtmlDivElement {
+  target: HTMLDivElement;
+  current: HTMLDivElement;
 }

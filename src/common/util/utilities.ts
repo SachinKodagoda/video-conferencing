@@ -68,17 +68,5 @@ export const drawHand = (predictions: AnnotatedPrediction[], ctx: CanvasRenderin
     //     ctx.fill();
     //   }
     // });
-
-    if (predictions.length > 0) {
-      const predicted = predictions[0].landmarks;
-      if (predicted.length > 0) {
-        const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0];
-        const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1];
-        ctx.beginPath();
-        ctx.arc(parseFloat((xMidSum / 3).toFixed(4)), parseFloat((yMidSum / 3).toFixed(4)), 10, 0, 3 * Math.PI);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-      }
-    }
   }
 };
