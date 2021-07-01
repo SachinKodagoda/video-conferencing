@@ -4,6 +4,7 @@ import '@tensorflow/tfjs-backend-webgl';
 import { drawHand } from '@util/utilities';
 import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
+import * as THREE from 'three';
 
 const Index = (): JSX.Element => {
   const [threeMenuOn, setThreeMenuOn] = useState(false);
@@ -77,6 +78,15 @@ const Index = (): JSX.Element => {
 
   useEffect(() => {
     runHandpose();
+    // Scene, camera, and renderer
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    setPages({ scene, camera, renderer });
+    camera.position.z = 60;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
