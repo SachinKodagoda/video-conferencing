@@ -12,7 +12,8 @@ const Three = ({ x = 0, y = 0 }: TProps): JSX.Element => {
   const { useEffect, useRef, useState } = React;
   const ref = useRef<HTMLDivElement>(null);
   const [isAnimating, setAnimating] = useState(true);
-  const controls = useRef(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const controls = useRef<any>(null);
 
   useLayoutEffect(() => {
     const temp = ref as unknown as IHtmlDivElement;
@@ -51,18 +52,10 @@ const Three = ({ x = 0, y = 0 }: TProps): JSX.Element => {
     };
 
     const animate = () => {
-      //   cube.rotation.x += 0.01;
-      //   cube.rotation.y += 0.01;
-      // eslint-disable-next-line no-console
-      console.log('width,height,x,y: =-->', width, height, x, y, ratio);
-      const vector = new THREE.Vector3(0, 2, 0);
-      // eslint-disable-next-line no-console
-      //   console.log('vector: =-->', vector);
-      //   vector.unproject(camera);
-      //   const dir = vector.sub(camera.position).normalize();
-      //   const distance = -camera.position.z / dir.z;
-      //   const pos = camera.position.clone().add(dir.multiplyScalar(distance));
-      cube.position.copy(vector);
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      // const vector = new THREE.Vector3(x, y, 0);
+      // cube.position.copy(vector);
       renderScene();
       frameId = window.requestAnimationFrame(animate);
     };
@@ -93,7 +86,7 @@ const Three = ({ x = 0, y = 0 }: TProps): JSX.Element => {
       geometry.dispose();
       material.dispose();
     };
-  }, []);
+  });
 
   useEffect(() => {
     if (isAnimating) {
@@ -102,6 +95,7 @@ const Three = ({ x = 0, y = 0 }: TProps): JSX.Element => {
       controls.current.stop();
     }
   }, [isAnimating]);
+
   return <div ref={ref} className={styles.three} onClick={() => setAnimating(val => !val)} aria-hidden='true' />;
 };
 
