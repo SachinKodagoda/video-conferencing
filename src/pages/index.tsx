@@ -46,7 +46,7 @@ const Index = (): JSX.Element => {
     //  Loop and detect hands
     setInterval(() => {
       detect(net);
-    }, 10);
+    }, 1000);
   };
 
   const detect = async (net: handpose.HandPose) => {
@@ -88,6 +88,12 @@ const Index = (): JSX.Element => {
         //     setY(yVal);
         //   }
         // }
+        ctx.beginPath();
+        ctx.arc(650, 0, 10, 0, 3 * Math.PI);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+        // eslint-disable-next-line no-console
+        console.log('videoWidth: =-->', videoWidth, videoHeight);
       }
     }
   };

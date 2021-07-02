@@ -14,22 +14,29 @@ let geometry: THREE.BoxGeometry;
 let material: THREE.MeshBasicMaterial;
 let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>;
 let frameId: number | null;
-let width: number;
-let height: number;
 let currentDiv: HTMLDivElement;
-let xRatio: number;
-let yRatio: number;
-let left: number; // -value
-let right: number; // +value
-let bottom: number;
-let top: number;
 const xMiddle = 0;
 const yMiddle = 0;
-const scaler = 100; // 1 is this amount of px
+const scaler = 10; // 1 is this amount of px
 const divider = scaler * 2;
 const near = 0;
 const cameraPos = 4;
 const far = divider;
+let width: number;
+let height: number;
+let xRatio: number; // width / (scaler * 2)
+let yRatio: number; // height / (scaler * 2)
+let left: number; // -xRatio
+let right: number; // +xRatio
+let bottom: number; // -yRatio
+let top: number; // +yRatio
+
+const yAxis = (y: number, h: number): number => {
+  return y > h / 2 ? -y / 8 : y / 8;
+};
+const xAxis = (x: number, w: number): number => {
+  return x > w / 2 ? -x / 8 : x / 8;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Three = ({ x, y }: TProps): JSX.Element => {
@@ -46,6 +53,8 @@ const Three = ({ x, y }: TProps): JSX.Element => {
     height = currentDiv.clientHeight || 1;
     xRatio = width / divider;
     yRatio = height / divider;
+    // eslint-disable-next-line no-console
+    console.log('width,height: =-->', width, height);
 
     // scene -->
     scene = new THREE.Scene();
@@ -138,7 +147,7 @@ const Three = ({ x, y }: TProps): JSX.Element => {
     //   controls.current.decrease();
     // }
     // eslint-disable-next-line no-console
-    // console.log('x:', x, width, 'y:', y, height);
+    console.log('x:', x, width / 2, xAxis(x, width / 2), 'y:', y, height / 2, yAxis(y, height / 2));
   }, [x, y]);
 
   return <div ref={temp} className={styles.three} aria-hidden='true' />;
