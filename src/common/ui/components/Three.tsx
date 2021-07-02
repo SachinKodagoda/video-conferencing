@@ -3,12 +3,12 @@ import { IHtmlDivElement } from '@ts/interfaces';
 import React, { useLayoutEffect } from 'react';
 import * as THREE from 'three';
 
-type TProps = {
-  x: number;
-  y: number;
-};
+// type TProps = {
+//   x: number;
+//   y: number;
+// };
 
-const Three = ({ x = 0, y = 0 }: TProps): JSX.Element => {
+const Three = (): JSX.Element => {
   const { useEffect, useRef, useState } = React;
   const ref = useRef<HTMLDivElement>(null);
   const [isAnimating, setAnimating] = useState(true);

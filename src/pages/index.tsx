@@ -1,4 +1,3 @@
-import Three from '@components/Three';
 import styles from '@pages_style/index.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
@@ -27,8 +26,8 @@ const Index = (): JSX.Element => {
 
   const usersIcon = showLeftBar ? 'groupActive' : 'group';
   const messageIcon = showRightBar ? 'messageActive' : 'message';
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  // const [x, setX] = useState(0);
+  // const [y, setY] = useState(0);
 
   const messageArray = [
     {
@@ -84,8 +83,8 @@ const Index = (): JSX.Element => {
             ctx.arc(xVal, yVal, 10, 0, 3 * Math.PI);
             ctx.fillStyle = 'red';
             ctx.fill();
-            setX(xVal);
-            setY(yVal);
+            // setX(xVal);
+            // setY(yVal);
           }
         }
       }
@@ -123,7 +122,6 @@ const Index = (): JSX.Element => {
               <>
                 <Webcam ref={webcamRef} className={styles.videoObject} />
                 <canvas ref={canvasRef} className={styles.canvasObject} />
-                <Three x={x} y={y} />
               </>
             ) : (
               <div className={styles.videoPlaceholder}>
