@@ -73,21 +73,21 @@ const Index = (): JSX.Element => {
       const ctx = canvasReference.getContext('2d');
       if (ctx) {
         // drawHand(hand, ctx);
-        if (hand.length > 0) {
-          const predicted = hand[0].landmarks;
-          if (predicted.length > 0) {
-            const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0];
-            const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1];
-            const xVal = parseFloat((xMidSum / 3).toFixed(4));
-            const yVal = parseFloat((yMidSum / 3).toFixed(4));
-            ctx.beginPath();
-            ctx.arc(xVal, yVal, 10, 0, 3 * Math.PI);
-            ctx.fillStyle = 'red';
-            ctx.fill();
-            setX(xVal);
-            setY(yVal);
-          }
-        }
+        // if (hand.length > 0) {
+        //   const predicted = hand[0].landmarks;
+        //   if (predicted.length > 0) {
+        //     const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0];
+        //     const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1];
+        //     const xVal = parseFloat((xMidSum / 3).toFixed(4));
+        //     const yVal = parseFloat((yMidSum / 3).toFixed(4));
+        //     ctx.beginPath();
+        //     ctx.arc(xVal, yVal, 10, 0, 3 * Math.PI);
+        //     ctx.fillStyle = 'red';
+        //     ctx.fill();
+        //     setX(xVal);
+        //     setY(yVal);
+        //   }
+        // }
       }
     }
   };
