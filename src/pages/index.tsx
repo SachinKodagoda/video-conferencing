@@ -1,7 +1,9 @@
-import Three from '@components/Three';
+import Box from '@components/Box';
 import styles from '@pages_style/index.module.sass';
+import { Canvas } from '@react-three/fiber';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
+import { leftTopToCenter } from '@util/common';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 
@@ -189,7 +191,14 @@ const Index = (): JSX.Element => {
                   videoConstraints={{ width: screenWidth, height: screenHeight }}
                 />
                 <canvas ref={canvasRef} className={styles.canvasObject} />
-                <Three x={x} y={y} width={fullSize.width} height={fullSize.height} fullSize={fullSize} />
+                <Canvas className={styles.newCanvas}>
+                  <ambientLight />
+                  <pointLight position={[10, 10, 10]} />
+                  <Box
+                    position={[leftTopToCenter(x, fullSize.width, 100), leftTopToCenter(y, fullSize.height, 100), 0]}
+                  />
+                </Canvas>
+                {/* <Three x={x} y={y} width={fullSize.width} height={fullSize.height} fullSize={fullSize} /> */}
               </>
             ) : (
               <div className={styles.videoPlaceholder}>

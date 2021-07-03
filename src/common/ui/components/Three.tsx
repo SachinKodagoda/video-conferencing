@@ -21,8 +21,6 @@ let material: THREE.MeshBasicMaterial;
 let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>;
 let frameId: number | null;
 let currentDiv: HTMLDivElement;
-const xMiddle = 0;
-const yMiddle = 0;
 const scaler = 100; // 1 is 100px
 const divider = scaler * 2;
 const near = 0;
