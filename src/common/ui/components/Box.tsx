@@ -1,19 +1,18 @@
-import { useFrame, Vector3 } from '@react-three/fiber';
+import { Vector3 } from '@react-three/fiber';
 import React, { useRef, useState } from 'react';
 
 type TProps = {
   position: Vector3 | undefined;
 };
 const Box = ({ position }: TProps): JSX.Element => {
-  const mesh = useRef();
+  const mesh = useRef<THREE.Mesh>(null);
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  // Rotate mesh every frame, this is outside of React without overhead
-  useFrame(() => {
-    // if (mesh?.current?.rotation?.x) {
-    //   mesh?.current?.rotation?.x += 0.01;
-    // }
-  });
+  //   useFrame(() => {
+  //     if (mesh?.current?.rotation?.x) {
+  //       mesh.current.rotation.x += 0.01;
+  //     }
+  //   });
   return (
     <mesh
       position={position}
