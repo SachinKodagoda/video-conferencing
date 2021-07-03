@@ -5,6 +5,8 @@ import * as THREE from 'three';
 type TProps = {
   x: number;
   y: number;
+  width: number;
+  height: number;
 };
 
 let scene: THREE.Scene;
@@ -17,13 +19,11 @@ let frameId: number | null;
 let currentDiv: HTMLDivElement;
 const xMiddle = 0;
 const yMiddle = 0;
-const scaler = 10; // 1 is this amount of px
+const scaler = 2; // 1 is this amount of px
 const divider = scaler * 2;
 const near = 0;
 const cameraPos = 4;
 const far = divider;
-let width: number;
-let height: number;
 let xRatio: number; // width / (scaler * 2)
 let yRatio: number; // height / (scaler * 2)
 let left: number; // -xRatio
@@ -31,16 +31,16 @@ let right: number; // +xRatio
 let bottom: number; // -yRatio
 let top: number; // +yRatio
 
-const yAxis = (y: number, h: number): number => {
-  return y > h / 2 ? -y / 8 : y / 8;
-};
-const xAxis = (x: number, w: number): number => {
-  return x > w / 2 ? -x / 8 : x / 8;
-};
+// const yAxis = (y: number, h: number): number => {
+//   return y > h / 2 ? -y / 8 : y / 8;
+// };
+// const xAxis = (x: number, w: number): number => {
+//   return x > w / 2 ? -x / 8 : x / 8;
+// };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Three = ({ x, y }: TProps): JSX.Element => {
-  const { useEffect, useRef } = React;
+const Three = ({ height, width, x, y }: TProps): JSX.Element => {
+  const { useRef } = React;
   const temp = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const controls = useRef<any>(null);
@@ -49,8 +49,6 @@ const Three = ({ x, y }: TProps): JSX.Element => {
 
   useLayoutEffect(() => {
     currentDiv = temp.current as unknown as HTMLDivElement;
-    width = currentDiv.clientWidth || 1;
-    height = currentDiv.clientHeight || 1;
     xRatio = width / divider;
     yRatio = height / divider;
     // eslint-disable-next-line no-console
@@ -80,11 +78,7 @@ const Three = ({ x, y }: TProps): JSX.Element => {
     scene.add(cube);
 
     const handleResize = () => {
-      width = currentDiv.clientWidth || 1;
-      height = currentDiv.clientHeight || 1;
-      // ratio = width / height;
       renderer.setSize(width, height);
-      // camera.aspect = ratio;
       camera.updateProjectionMatrix();
       renderer.render(scene, camera);
     };
@@ -111,7 +105,7 @@ const Three = ({ x, y }: TProps): JSX.Element => {
       frameId = null;
     };
 
-    currentDiv.appendChild(renderer.domElement);
+    currentDiv?.appendChild(renderer.domElement);
     window.addEventListener('resize', handleResize);
     start();
     const increase = () => {
@@ -131,24 +125,25 @@ const Three = ({ x, y }: TProps): JSX.Element => {
     return () => {
       stop();
       window.removeEventListener('resize', handleResize);
-      currentDiv.removeChild(renderer.domElement);
+      currentDiv?.removeChild(renderer.domElement);
       scene.remove(cube);
       geometry.dispose();
       material.dispose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    // if (isAnimating) {
-    //   // controls.current.start();
-    //   controls.current.increase();
-    // } else {
-    //   // controls.current.stop();
-    //   controls.current.decrease();
-    // }
-    // eslint-disable-next-line no-console
-    console.log('x:', x, width / 2, xAxis(x, width / 2), 'y:', y, height / 2, yAxis(y, height / 2));
-  }, [x, y]);
+  // useEffect(() => {
+  //   // if (isAnimating) {
+  //   //   // controls.current.start();
+  //   //   controls.current.increase();
+  //   // } else {
+  //   //   // controls.current.stop();
+  //   //   controls.current.decrease();
+  //   // }
+  //   // eslint-disable-next-line no-console
+  //   // console.log('x:', x, width / 2, xAxis(x, width / 2), 'y:', y, height / 2, yAxis(y, height / 2));
+  // }, [x, y, width, height]);
 
   return <div ref={temp} className={styles.three} aria-hidden='true' />;
 };

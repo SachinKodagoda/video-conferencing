@@ -1,8 +1,8 @@
-import Three from '@components/Three';
 import styles from '@pages_style/index.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
-import React, { useEffect, useRef, useState } from 'react';
+import { drawHand } from '@util/utilities';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 
 const Index = (): JSX.Element => {
@@ -10,6 +10,9 @@ const Index = (): JSX.Element => {
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [screenWidth, setScreenWidth] = useState(10);
+  const [screenHeight, setScreenHeight] = useState(10);
 
   const [streaming, setStreaming] = useState(false);
   const [videoOn, setVideoOn] = useState(false);
@@ -27,8 +30,8 @@ const Index = (): JSX.Element => {
 
   const usersIcon = showLeftBar ? 'groupActive' : 'group';
   const messageIcon = showRightBar ? 'messageActive' : 'message';
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  // const [x, setX] = useState(0);
+  // const [y, setY] = useState(0);
 
   const messageArray = [
     {
@@ -46,7 +49,7 @@ const Index = (): JSX.Element => {
     //  Loop and detect hands
     setInterval(() => {
       detect(net);
-    }, 1000);
+    }, 10); // 10
   };
 
   const detect = async (net: handpose.HandPose) => {
@@ -56,8 +59,16 @@ const Index = (): JSX.Element => {
       typeof webcamRef.current !== 'undefined' &&
       webcamRef.current !== null &&
       videoReference.readyState === 4 &&
-      net
+      net &&
+      typeof containerRef.current !== 'undefined' &&
+      containerRef.current !== null
     ) {
+      // // Set video width
+      // videoReference.width = containerRef.current.clientWidth;
+      // videoReference.height = containerRef.current.clientHeight;
+      // // Set canvas height
+      // canvasReference.width = containerRef.current.clientWidth;
+      // canvasReference.height = containerRef.current.clientHeight;
       // Get video properties
       const { videoWidth } = videoReference;
       const { videoHeight } = videoReference;
@@ -67,12 +78,15 @@ const Index = (): JSX.Element => {
       // Set canvas height
       canvasReference.width = videoWidth;
       canvasReference.height = videoHeight;
+
+      // eslint-disable-next-line no-console
+      console.log(': =-->', containerRef.current.clientWidth, containerRef.current.clientHeight);
       // Make Detections
       const hand = await net.estimateHands(videoReference);
       // Draw mesh
       const ctx = canvasReference.getContext('2d');
       if (ctx) {
-        // drawHand(hand, ctx);
+        drawHand(hand, ctx);
         // if (hand.length > 0) {
         //   const predicted = hand[0].landmarks;
         //   if (predicted.length > 0) {
@@ -89,11 +103,25 @@ const Index = (): JSX.Element => {
         //   }
         // }
         ctx.beginPath();
-        ctx.arc(650, 0, 10, 0, 3 * Math.PI);
-        ctx.fillStyle = 'red';
+        ctx.arc(videoWidth / 2, videoHeight / 2, 10, 0, 3 * Math.PI);
+        ctx.fillStyle = 'green';
         ctx.fill();
-        // eslint-disable-next-line no-console
-        console.log('videoWidth: =-->', videoWidth, videoHeight);
+        ctx.beginPath();
+        ctx.arc(0, 0, 10, 0, 3 * Math.PI);
+        ctx.fillStyle = 'blue';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(videoWidth, videoHeight, 10, 0, 3 * Math.PI);
+        ctx.fillStyle = 'yellow';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(0, videoHeight, 10, 0, 3 * Math.PI);
+        ctx.fillStyle = 'pink';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(videoWidth, 0, 10, 0, 3 * Math.PI);
+        ctx.fillStyle = 'white';
+        ctx.fill();
       }
     }
   };
@@ -101,6 +129,14 @@ const Index = (): JSX.Element => {
   useEffect(() => {
     runHandpose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    const containerRefs = containerRef?.current as HTMLDivElement;
+    if (containerRefs) {
+      setScreenWidth(containerRefs.clientWidth);
+      setScreenHeight(containerRefs.clientHeight);
+    }
   }, []);
 
   return (
@@ -124,12 +160,20 @@ const Index = (): JSX.Element => {
             </div>
           )}
 
-          <div className={styles.videoMenuMiddle} style={{ marginLeft: showLeftBar ? '20px' : '0px' }}>
+          <div ref={containerRef} className={styles.videoMenuMiddle}>
             {videoOn ? (
               <>
-                <Webcam ref={webcamRef} className={styles.videoObject} />
+                <Webcam
+                  ref={webcamRef}
+                  className={styles.videoObject}
+                  screenshotFormat='image/jpeg'
+                  mirrored
+                  width={screenWidth}
+                  height={screenHeight}
+                  videoConstraints={{ width: screenWidth, height: screenHeight }}
+                />
                 <canvas ref={canvasRef} className={styles.canvasObject} />
-                <Three x={x} y={y} />
+                {/* <Three x={x} y={y} width={webCamContainer.width} height={webCamContainer.height} /> */}
               </>
             ) : (
               <div className={styles.videoPlaceholder}>
