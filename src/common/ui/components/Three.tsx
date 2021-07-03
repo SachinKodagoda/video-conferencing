@@ -1,5 +1,5 @@
 import styles from '@components_style/Three.module.sass';
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import * as THREE from 'three';
 
 type TProps = {
@@ -7,6 +7,10 @@ type TProps = {
   y: number;
   width: number;
   height: number;
+  fullSize: {
+    width: number;
+    height: number;
+  };
 };
 
 let scene: THREE.Scene;
@@ -19,7 +23,7 @@ let frameId: number | null;
 let currentDiv: HTMLDivElement;
 const xMiddle = 0;
 const yMiddle = 0;
-const scaler = 2; // 1 is this amount of px
+const scaler = 100; // 1 is 100px
 const divider = scaler * 2;
 const near = 0;
 const cameraPos = 4;
@@ -31,28 +35,32 @@ let right: number; // +xRatio
 let bottom: number; // -yRatio
 let top: number; // +yRatio
 
-// const yAxis = (y: number, h: number): number => {
-//   return y > h / 2 ? -y / 8 : y / 8;
-// };
-// const xAxis = (x: number, w: number): number => {
-//   return x > w / 2 ? -x / 8 : x / 8;
-// };
+const yAxis = (y: number, h: number): number => {
+  const gap = h / divider - y / scaler;
+  return y > h / 2 ? gap : gap;
+};
+const xAxis = (x: number, w: number): number => {
+  const gap = w / divider - x / scaler;
+  return x > w / 2 ? gap : gap;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Three = ({ height, width, x, y }: TProps): JSX.Element => {
+const Three = ({ fullSize, height, width, x, y }: TProps): JSX.Element => {
+  // eslint-disable-next-line no-console
+  // console.log('fullSize: =-->', height, width);
   const { useRef } = React;
   const temp = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const controls = useRef<any>(null);
   // eslint-disable-next-line no-console
-  // console.log('x,y: =-->', x, y);
+  // console.log('x,y: =-->', xAxis(x, width), yAxis(y, height));
 
   useLayoutEffect(() => {
     currentDiv = temp.current as unknown as HTMLDivElement;
     xRatio = width / divider;
     yRatio = height / divider;
     // eslint-disable-next-line no-console
-    console.log('width,height: =-->', width, height);
+    // console.log('width,height: =-->', width, height);
 
     // scene -->
     scene = new THREE.Scene();
@@ -77,6 +85,10 @@ const Three = ({ height, width, x, y }: TProps): JSX.Element => {
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
+    // light-->
+    const light = new THREE.AmbientLight(0x404040, 100);
+    scene.add(light);
+
     const handleResize = () => {
       renderer.setSize(width, height);
       camera.updateProjectionMatrix();
@@ -84,10 +96,10 @@ const Three = ({ height, width, x, y }: TProps): JSX.Element => {
     };
 
     const animate = () => {
-      // cube.rotation.x += 0.01;
-      // cube.rotation.y += 0.01;
-      const vector = new THREE.Vector3(xMiddle, yMiddle, 0);
-      cube.position.copy(vector);
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      // const vector = new THREE.Vector3(0, 0, 0);
+      // cube.position.copy(vector);
       frameId = window.requestAnimationFrame(animate);
       renderer.render(scene, camera);
     };
@@ -96,6 +108,13 @@ const Three = ({ height, width, x, y }: TProps): JSX.Element => {
       if (!frameId) {
         frameId = requestAnimationFrame(animate);
       }
+    };
+
+    const restart = () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+      frameId = requestAnimationFrame(animate);
     };
 
     const stop = () => {
@@ -108,19 +127,14 @@ const Three = ({ height, width, x, y }: TProps): JSX.Element => {
     currentDiv?.appendChild(renderer.domElement);
     window.addEventListener('resize', handleResize);
     start();
-    const increase = () => {
-      // cube.scale.x += 1;
-      // cube.scale.y += 1;
-      // cube.scale.z += 1;
-      cube.translateY(1);
+
+    const change = (xTemp: number, yTemp: number) => {
+      const vector = new THREE.Vector3(xAxis(xTemp, width), yAxis(yTemp, height), 0);
+      cube.position.copy(vector);
+      restart();
     };
-    const decrease = () => {
-      // cube.scale.x -= 1;
-      // cube.scale.y -= 1;
-      // cube.scale.z -= 1;
-      cube.translateY(-1);
-    };
-    controls.current = { start, stop, increase, decrease };
+
+    controls.current = { change };
 
     return () => {
       stop();
@@ -133,19 +147,11 @@ const Three = ({ height, width, x, y }: TProps): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   // if (isAnimating) {
-  //   //   // controls.current.start();
-  //   //   controls.current.increase();
-  //   // } else {
-  //   //   // controls.current.stop();
-  //   //   controls.current.decrease();
-  //   // }
-  //   // eslint-disable-next-line no-console
-  //   // console.log('x:', x, width / 2, xAxis(x, width / 2), 'y:', y, height / 2, yAxis(y, height / 2));
-  // }, [x, y, width, height]);
+  useEffect(() => {
+    controls.current.change(x, y);
+  }, [x, y]);
 
-  return <div ref={temp} className={styles.three} aria-hidden='true' />;
+  return <div ref={temp} className={styles.three} aria-hidden='true' style={{ width, height }} />;
 };
 
 export default Three;

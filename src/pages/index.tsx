@@ -1,7 +1,7 @@
+import Three from '@components/Three';
 import styles from '@pages_style/index.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
-import { drawHand } from '@util/utilities';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 
@@ -13,6 +13,10 @@ const Index = (): JSX.Element => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [screenWidth, setScreenWidth] = useState(10);
   const [screenHeight, setScreenHeight] = useState(10);
+  const [fullSize, setFullSize] = useState({
+    width: 0,
+    height: 0,
+  });
 
   const [streaming, setStreaming] = useState(false);
   const [videoOn, setVideoOn] = useState(false);
@@ -30,8 +34,8 @@ const Index = (): JSX.Element => {
 
   const usersIcon = showLeftBar ? 'groupActive' : 'group';
   const messageIcon = showRightBar ? 'messageActive' : 'message';
-  // const [x, setX] = useState(0);
-  // const [y, setY] = useState(0);
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
 
   const messageArray = [
     {
@@ -78,50 +82,62 @@ const Index = (): JSX.Element => {
       // Set canvas height
       canvasReference.width = videoWidth;
       canvasReference.height = videoHeight;
+      setFullSize({
+        width: videoWidth,
+        height: videoHeight,
+      });
 
       // eslint-disable-next-line no-console
-      console.log(': =-->', containerRef.current.clientWidth, containerRef.current.clientHeight);
+      // console.log(': =-->', containerRef.current.clientWidth, containerRef.current.clientHeight);
       // Make Detections
       const hand = await net.estimateHands(videoReference);
       // Draw mesh
       const ctx = canvasReference.getContext('2d');
       if (ctx) {
-        drawHand(hand, ctx);
-        // if (hand.length > 0) {
-        //   const predicted = hand[0].landmarks;
-        //   if (predicted.length > 0) {
-        //     const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0];
-        //     const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1];
-        //     const xVal = parseFloat((xMidSum / 3).toFixed(4));
-        //     const yVal = parseFloat((yMidSum / 3).toFixed(4));
-        //     ctx.beginPath();
-        //     ctx.arc(xVal, yVal, 10, 0, 3 * Math.PI);
-        //     ctx.fillStyle = 'red';
-        //     ctx.fill();
-        //     setX(xVal);
-        //     setY(yVal);
-        //   }
-        // }
-        ctx.beginPath();
-        ctx.arc(videoWidth / 2, videoHeight / 2, 10, 0, 3 * Math.PI);
-        ctx.fillStyle = 'green';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(0, 0, 10, 0, 3 * Math.PI);
-        ctx.fillStyle = 'blue';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(videoWidth, videoHeight, 10, 0, 3 * Math.PI);
-        ctx.fillStyle = 'yellow';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(0, videoHeight, 10, 0, 3 * Math.PI);
-        ctx.fillStyle = 'pink';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(videoWidth, 0, 10, 0, 3 * Math.PI);
-        ctx.fillStyle = 'white';
-        ctx.fill();
+        // drawHand(hand, ctx);
+        if (hand.length > 0) {
+          const predicted = hand[0].landmarks;
+          if (predicted.length > 0) {
+            const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0];
+            const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1];
+            const xVal = parseFloat((xMidSum / 3).toFixed(4));
+            const yVal = parseFloat((yMidSum / 3).toFixed(4));
+            ctx.beginPath();
+            ctx.arc(xVal, yVal, 10, 0, 3 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            setX(xVal);
+            setY(yVal);
+          }
+        }
+        // ctx.beginPath();
+        // ctx.arc(videoWidth / 2, videoHeight / 2, 10, 0, 3 * Math.PI);
+        // ctx.fillStyle = 'green';
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(0, 0, 10, 0, 3 * Math.PI);
+        // ctx.fillStyle = 'blue';
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(videoWidth, videoHeight, 10, 0, 3 * Math.PI);
+        // ctx.fillStyle = 'yellow';
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(0, videoHeight, 10, 0, 3 * Math.PI);
+        // ctx.fillStyle = 'pink';
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(videoWidth, 0, 10, 0, 3 * Math.PI);
+        // ctx.fillStyle = 'white';
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(videoWidth / 2, 0, 10, 0, 3 * Math.PI);
+        // ctx.fillStyle = 'white';
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(videoWidth / 2, videoHeight, 10, 0, 3 * Math.PI);
+        // ctx.fillStyle = 'white';
+        // ctx.fill();
       }
     }
   };
@@ -173,7 +189,7 @@ const Index = (): JSX.Element => {
                   videoConstraints={{ width: screenWidth, height: screenHeight }}
                 />
                 <canvas ref={canvasRef} className={styles.canvasObject} />
-                {/* <Three x={x} y={y} width={webCamContainer.width} height={webCamContainer.height} /> */}
+                <Three x={x} y={y} width={fullSize.width} height={fullSize.height} fullSize={fullSize} />
               </>
             ) : (
               <div className={styles.videoPlaceholder}>
