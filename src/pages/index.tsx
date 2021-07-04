@@ -1,10 +1,11 @@
 import Box from '@components/Box';
 import styles from '@pages_style/index.module.sass';
+import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
 import { leftTopToCenter } from '@util/common';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 
 const Index = (): JSX.Element => {
@@ -149,7 +150,7 @@ const Index = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const containerRefs = containerRef?.current as HTMLDivElement;
     if (containerRefs) {
       setScreenWidth(containerRefs.clientWidth);
@@ -192,6 +193,7 @@ const Index = (): JSX.Element => {
                 />
                 <canvas ref={canvasRef} className={styles.canvasObject} />
                 <Canvas className={styles.newCanvas}>
+                  <OrbitControls />
                   <ambientLight />
                   <pointLight position={[10, 10, 10]} />
                   <Box
