@@ -108,16 +108,16 @@ const Index = (): JSX.Element => {
             )}
           </div>
           {showRightBar && <MainRightBar />}
-          <MainBottomBar
-            videoOn={videoOn}
-            showLeftBar={showLeftBar}
-            showRightBar={showRightBar}
-            setVideoOn={val => setVideoOn(val)}
-            setShowLeftBar={val => setShowLeftBar(val)}
-            setShowRightBar={val => setShowRightBar(val)}
-          />
         </div>
       </div>
+      <MainBottomBar
+        videoOn={videoOn}
+        showLeftBar={showLeftBar}
+        showRightBar={showRightBar}
+        setVideoOn={val => setVideoOn(val)}
+        setShowLeftBar={val => setShowLeftBar(val)}
+        setShowRightBar={val => setShowRightBar(val)}
+      />
     </div>
   );
 };
