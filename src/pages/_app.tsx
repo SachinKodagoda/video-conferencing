@@ -1,3 +1,4 @@
+import { AnimationContextProvider } from '@ctx/AnimationContext';
 import { CartContextProvider } from '@ctx/CartContext';
 import { UserContextProvider } from '@ctx/UserContext';
 import '@styles/globals.sass';
@@ -21,10 +22,13 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => {
         <meta name='theme-color' content='#000' />
         <meta name='apple-mobile-web-app-status-bar-style' content='#000' />
       </Head>
+
       <UserContextProvider>
         <CartContextProvider>
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <Component {...pageProps} />
+          <AnimationContextProvider>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Component {...pageProps} />
+          </AnimationContextProvider>
         </CartContextProvider>
       </UserContextProvider>
     </>

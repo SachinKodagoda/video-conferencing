@@ -3,6 +3,8 @@ import { AnnotatedPrediction } from '@tensorflow-models/handpose';
 type TReturn = {
   xVal: number | null;
   yVal: number | null;
+  xLen: number | null;
+  primaryAngle: number | null;
 };
 
 type TFingerJoints = {
@@ -48,27 +50,48 @@ const style = {
 };
 
 // Draw the center of the hand -->
-export const drawHandCenter = (ctx: CanvasRenderingContext2D, hand: AnnotatedPrediction[]): TReturn => {
+export const drawHandCenter = (ctx: CanvasRenderingContext2D, x: number, y: number): void => {
+  ctx.beginPath();
+  ctx.arc(x, y, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+};
+
+type TNumArr = [number, number, number];
+
+const find_angle = (A: TNumArr, B: TNumArr, C: TNumArr) => {
+  // ABC triangle.. Checking angle at B (in radian)
+  const c = Math.sqrt((B[0] - A[0]) ** 2 + (B[1] - A[1]) ** 2);
+  const a = Math.sqrt((B[0] - C[0]) ** 2 + (B[1] - C[1]) ** 2);
+  const b = Math.sqrt((C[0] - A[0]) ** 2 + (C[1] - A[1]) ** 2);
+  return Math.acos((a * a + c * c - b * b) / (2 * a * c));
+};
+
+// Get Hand center -->
+export const getHandCenter = (hand: AnnotatedPrediction[]): TReturn => {
   if (hand.length > 0) {
     const predicted = hand[0].landmarks;
     if (predicted.length > 0) {
-      const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0];
-      const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1];
+      // [mark][x or y or z]
+      const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0]; // x
+      const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1]; // y
       const xVal = parseFloat((xMidSum / 3).toFixed(4));
       const yVal = parseFloat((yMidSum / 3).toFixed(4));
-      ctx.beginPath();
-      ctx.arc(xVal, yVal, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-      ctx.fill();
+      const xLen = predicted[17][0] - predicted[5][0];
+      const primaryAngle = find_angle(predicted[8], predicted[5], predicted[4]);
       return {
         xVal,
         yVal,
+        xLen,
+        primaryAngle,
       };
     }
   }
   return {
     xVal: null,
     yVal: null,
+    xLen: null,
+    primaryAngle: null,
   };
 };
 
@@ -98,6 +121,18 @@ export const drawFullHand = (ctx: CanvasRenderingContext2D, hand: AnnotatedPredi
         ctx.fillStyle = style[i].color;
         ctx.fill();
       }
+      ctx.beginPath();
+      ctx.moveTo(landmarks[8][0], landmarks[8][1]);
+      ctx.lineTo(landmarks[5][0], landmarks[5][1]);
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(landmarks[5][0], landmarks[5][1]);
+      ctx.lineTo(landmarks[4][0], landmarks[4][1]);
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 4;
+      ctx.stroke();
     });
   }
 };
@@ -110,49 +145,64 @@ export const markCanvasCorners = (ctx: CanvasRenderingContext2D, screenWidth: nu
   const left = screenWidth;
   const top = 0;
   const bottom = screenHeight;
-  for (let j = 0; j < 10; j += 1) {
-    ctx.beginPath();
-    if (j === 0) {
-      // origin (right top)
-      ctx.arc(right, top, 10, 0, 5 * Math.PI);
-      ctx.fillStyle = 'white';
-    } else if (j === 1) {
-      // center (xMiddle, yMiddle)
-      ctx.arc(xMiddle, yMiddle, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else if (j === 2) {
-      // left top
-      ctx.arc(left, top, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else if (j === 3) {
-      // xMiddle top
-      ctx.arc(xMiddle, top, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else if (j === 4) {
-      // right top
-      ctx.arc(right, top, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else if (j === 5) {
-      // right yMiddle
-      ctx.arc(right, yMiddle, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else if (j === 6) {
-      // right bottom
-      ctx.arc(right, bottom, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else if (j === 7) {
-      // xMiddle bottom
-      ctx.arc(xMiddle, bottom, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else if (j === 8) {
-      // left bottom
-      ctx.arc(left, bottom, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    } else {
-      // left yMiddle
-      ctx.arc(left, yMiddle, 10, 0, 3 * Math.PI);
-      ctx.fillStyle = 'red';
-    }
-    ctx.fill();
-  }
+
+  // origin (right top)
+  ctx.beginPath();
+  ctx.arc(right, top, 20, 0, 3 * Math.PI);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+
+  // center (xMiddle, yMiddle)
+  ctx.beginPath();
+  ctx.arc(xMiddle, yMiddle, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // left top
+  ctx.beginPath();
+  ctx.arc(left, top, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // xMiddle top
+  ctx.beginPath();
+  ctx.arc(xMiddle, top, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // right top
+  ctx.beginPath();
+  ctx.arc(right, top, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // right yMiddle
+  ctx.beginPath();
+  ctx.arc(right, yMiddle, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // right bottom
+  ctx.beginPath();
+  ctx.arc(right, bottom, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // xMiddle bottom
+  ctx.beginPath();
+  ctx.arc(xMiddle, bottom, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // left bottom
+  ctx.beginPath();
+  ctx.arc(left, bottom, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // left yMiddle
+  ctx.beginPath();
+  ctx.arc(left, yMiddle, 10, 0, 3 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
 };

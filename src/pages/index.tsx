@@ -1,3 +1,4 @@
+import { AnimationContext } from '@ctx/AnimationContext';
 import MainBottomBar from '@layouts/MainBottomBar';
 import MainLeftBar from '@layouts/MainLeftBar';
 import MainMiddleArea from '@layouts/MainMiddleArea';
@@ -6,14 +7,9 @@ import MainRightBar from '@layouts/MainRightBar';
 import styles from '@pages_style/index.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
 import '@tensorflow/tfjs-backend-webgl';
-import { drawHandCenter } from '@util/handPose';
-import React, { useEffect, useRef, useState } from 'react';
+import { drawFullHand, getHandCenter } from '@util/handPose';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
-
-type TXyType = {
-  x: number;
-  y: number;
-};
 
 const Index = (): JSX.Element => {
   const webcamRef = useRef<Webcam | null>(null);
@@ -22,16 +18,8 @@ const Index = (): JSX.Element => {
   const [videoOn, setVideoOn] = useState(false);
   const [showLeftBar, setShowLeftBar] = useState(true);
   const [showRightBar, setShowRightBar] = useState(true);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
-  const [videoSize, setVideoSize] = useState({
-    width: 0,
-    height: 0,
-  });
-  const [xy, setXY] = useState<TXyType>({
-    x: 0,
-    y: 0,
-  });
+  const { setContainerHeight, setContainerWidth, setVideoHeight, setVideoWidth, setX, setY, setZoom, setZoomAngle } =
+    useContext(AnimationContext);
 
   const runHandpose = async () => {
     const net = await handpose.load();
@@ -44,13 +32,12 @@ const Index = (): JSX.Element => {
   const detect = async (net: handpose.HandPose) => {
     const videoReference = webcamRef?.current?.video as HTMLVideoElement;
     const canvasReference = canvasRef?.current as HTMLCanvasElement;
+
     if (
       typeof webcamRef.current !== 'undefined' &&
       webcamRef.current !== null &&
       videoReference.readyState === 4 &&
-      net &&
-      typeof containerRef.current !== 'undefined' &&
-      containerRef.current !== null
+      net
     ) {
       const { videoWidth } = videoReference;
       const { videoHeight } = videoReference;
@@ -58,25 +45,34 @@ const Index = (): JSX.Element => {
       videoReference.height = videoHeight;
       canvasReference.width = videoWidth;
       canvasReference.height = videoHeight;
-      setVideoSize({
-        width: videoWidth,
-        height: videoHeight,
-      });
+      setVideoWidth(videoWidth);
+      setVideoHeight(videoHeight);
 
       const hand = await net.estimateHands(videoReference);
       const ctx = canvasReference.getContext('2d');
       if (ctx) {
-        // drawHand(ctx, hand);
-        const xyValues = drawHandCenter(ctx, hand);
-        if (xyValues.xVal && xyValues.yVal) {
-          setXY({
-            x: xyValues.xVal,
-            y: xyValues.yVal,
-          });
+        drawFullHand(ctx, hand);
+        // markCanvasCorners(ctx, videoWidth, videoHeight);
+        const xyValues = getHandCenter(hand);
+        if (xyValues.primaryAngle !== null) {
+          setZoomAngle(xyValues.primaryAngle);
+          setZoom(true);
+        } else {
+          setZoom(false);
+        }
+
+        if (xyValues.xVal !== null && xyValues.yVal !== null) {
+          setX(xyValues.xVal);
+          setY(xyValues.yVal);
         }
       }
     }
   };
+
+  useEffect(() => {
+    runHandpose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const containerRefs = containerRef?.current as HTMLDivElement;
@@ -84,9 +80,7 @@ const Index = (): JSX.Element => {
       setContainerWidth(containerRefs.clientWidth);
       setContainerHeight(containerRefs.clientHeight);
     }
-    runHandpose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setContainerHeight, setContainerWidth]);
 
   return (
     <div className={styles.container}>
@@ -94,18 +88,7 @@ const Index = (): JSX.Element => {
         <div className={styles.videoContainerInner}>
           {showLeftBar && <MainLeftBar />}
           <div ref={containerRef} className={styles.videoMenuMiddle}>
-            {videoOn ? (
-              <MainMiddleArea
-                canvasRef={canvasRef}
-                webcamRef={webcamRef}
-                containerWidth={containerWidth}
-                containerHeight={containerHeight}
-                xy={xy}
-                videoSize={videoSize}
-              />
-            ) : (
-              <MainMiddlePlaceHolder />
-            )}
+            {videoOn ? <MainMiddleArea canvasRef={canvasRef} webcamRef={webcamRef} /> : <MainMiddlePlaceHolder />}
           </div>
           {showRightBar && <MainRightBar />}
         </div>

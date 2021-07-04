@@ -1,32 +1,18 @@
 import ThreeWorld from '@components/ThreeWorld';
+import { AnimationContext } from '@ctx/AnimationContext';
 import styles from '@layouts_style/MainMiddleArea.module.sass';
-import React from 'react';
+import React, { useContext } from 'react';
 import Webcam from 'react-webcam';
 
 type TProps = {
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
   webcamRef: React.MutableRefObject<Webcam | null>;
-  containerWidth: number;
-  containerHeight: number;
-  videoSize: {
-    width: number;
-    height: number;
-  };
-  xy: {
-    x: number;
-    y: number;
-  };
 };
-const scaler = 100;
-const MainMiddleArea = ({
-  canvasRef,
-  containerHeight,
-  containerWidth,
-  videoSize,
-  webcamRef,
-  xy,
-}: TProps): JSX.Element => {
-  const showWebCam = false;
+
+const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
+  const showWebCam = true;
+  const { containerHeight, containerWidth } = useContext(AnimationContext);
+
   return (
     <>
       {showWebCam && (
@@ -41,7 +27,7 @@ const MainMiddleArea = ({
         />
       )}
       <canvas ref={canvasRef} className={styles.canvasObject} />
-      <ThreeWorld width={videoSize.width} height={videoSize.height} scaler={scaler} x={xy.x} y={xy.y} />
+      <ThreeWorld />
     </>
   );
 };
