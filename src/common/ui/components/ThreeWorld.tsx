@@ -1,5 +1,5 @@
-import Box from '@components/Box';
-import styles from '@components_style/World.module.sass';
+import ThreeBox from '@components/ThreeBox';
+import styles from '@components_style/ThreeWorld.module.sass';
 import { Canvas } from '@react-three/fiber';
 import { leftTopToCenter } from '@util/common';
 import React from 'react';
@@ -12,7 +12,7 @@ type TProps = {
   scaler: number;
 };
 
-const World = ({ height, scaler, width, x, y }: TProps): JSX.Element => {
+const ThreeWorld = ({ height, scaler, width, x, y }: TProps): JSX.Element => {
   const showMovingBox = false;
   return (
     <Canvas className={styles.newCanvas} orthographic camera={{ far: 1, near: 0.1, right: 10 }}>
@@ -21,12 +21,12 @@ const World = ({ height, scaler, width, x, y }: TProps): JSX.Element => {
       <pointLight position={[10, 10, 10]} />
 
       {showMovingBox ? (
-        <Box position={[leftTopToCenter(x, width, scaler), leftTopToCenter(y, height, scaler), 0]} />
+        <ThreeBox position={[leftTopToCenter(x, width, scaler), leftTopToCenter(y, height, scaler), 0]} />
       ) : (
-        <Box position={[0, 0, 0]} />
+        <ThreeBox position={[0, 0, 0]} />
       )}
     </Canvas>
   );
 };
 
-export default World;
+export default ThreeWorld;

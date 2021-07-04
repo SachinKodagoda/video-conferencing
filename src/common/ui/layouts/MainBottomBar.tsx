@@ -1,4 +1,4 @@
-import styles from '@pages_style/index.module.sass';
+import styles from '@layouts_style/MainBottomBar.module.sass';
 import React, { useState } from 'react';
 
 type TProps = {

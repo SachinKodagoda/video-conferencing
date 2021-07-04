@@ -1,5 +1,5 @@
-import World from '@components/World';
-import styles from '@pages_style/index.module.sass';
+import ThreeWorld from '@components/ThreeWorld';
+import styles from '@layouts_style/MainMiddleArea.module.sass';
 import React from 'react';
 import Webcam from 'react-webcam';
 
@@ -41,7 +41,7 @@ const MainMiddleArea = ({
         />
       )}
       <canvas ref={canvasRef} className={styles.canvasObject} />
-      <World width={videoSize.width} height={videoSize.height} scaler={scaler} x={xy.x} y={xy.y} />
+      <ThreeWorld width={videoSize.width} height={videoSize.height} scaler={scaler} x={xy.x} y={xy.y} />
     </>
   );
 };

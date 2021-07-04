@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 type TProps = {
   position: Vector3 | undefined;
 };
-const Box = ({ position }: TProps): JSX.Element => {
+const ThreeBox = ({ position }: TProps): JSX.Element => {
   const mesh = useRef<THREE.Mesh>(null);
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
@@ -27,4 +27,4 @@ const Box = ({ position }: TProps): JSX.Element => {
   );
 };
 
-export default Box;
+export default ThreeBox;

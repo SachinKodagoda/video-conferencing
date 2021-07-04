@@ -1,4 +1,4 @@
-import styles from '@pages_style/index.module.sass';
+import styles from '@layouts_style/MainLeftBar.module.sass';
 import React from 'react';
 
 const MainLeftBar = (): JSX.Element => {
