@@ -1,23 +1,20 @@
-import ThreeBox from '@components/ThreeBox';
-import ThreeModel from '@components/ThreeModel';
+import ThreeTestModel from '@components/ThreeTestModel';
 import styles from '@components_style/ThreeWorld.module.sass';
 import { AnimationContext } from '@ctx/AnimationContext';
-import { OrthographicCamera } from '@react-three/drei';
+import { OrbitControls, OrthographicCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import React, { Suspense, useContext } from 'react';
 
 // examples
 // https://onion2k.github.io/r3f-by-example/
+// https://github.com/pmndrs/react-three-fiber/blob/master/markdown/api.md
 
 const ThreeWorld = (): JSX.Element => {
-  const { bottom, divider, handCenterX, handCenterY, left, right, top, videoHeight, videoWidth, zoomAngle, zoomVal } =
+  const { bottom, divider, handCenterX, handCenterY, left, right, top, videoHeight, videoWidth, zoomVal } =
     useContext(AnimationContext);
-  // eslint-disable-next-line no-console
-  console.log('zoomAngle: =-->', zoomAngle);
-  // eslint-disable-next-line no-console
-  console.log('handCenterX: =-->', handCenterX);
   return (
     <Canvas className={styles.newCanvas} style={{ width: videoWidth, height: videoHeight }}>
+      <OrbitControls />
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       <OrthographicCamera
@@ -31,9 +28,8 @@ const ThreeWorld = (): JSX.Element => {
         far={divider}
         position={[0, 0, divider]}
       />
-      <ThreeBox position={[handCenterX, handCenterY, 0]} zoomVal={zoomVal} />
       <Suspense fallback={null}>
-        <ThreeModel />
+        <ThreeTestModel position={[handCenterX, handCenterY, 0]} zoomVal={zoomVal} />
       </Suspense>
     </Canvas>
   );

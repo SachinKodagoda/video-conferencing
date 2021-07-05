@@ -95,6 +95,27 @@ export const getHandCenter = (hand: AnnotatedPrediction[]): TReturn => {
   };
 };
 
+// Draw Zooming -->
+export const drawZooming = (ctx: CanvasRenderingContext2D, hand: AnnotatedPrediction[]): void => {
+  if (hand.length > 0) {
+    const predicted = hand[0].landmarks;
+    if (predicted.length > 0) {
+      ctx.beginPath();
+      ctx.moveTo(predicted[8][0], predicted[8][1]);
+      ctx.lineTo(predicted[5][0], predicted[5][1]);
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(predicted[5][0], predicted[5][1]);
+      ctx.lineTo(predicted[4][0], predicted[4][1]);
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    }
+  }
+};
+
 // Draw the full hand -->
 export const drawFullHand = (ctx: CanvasRenderingContext2D, hand: AnnotatedPrediction[]): void => {
   if (hand.length > 0) {
@@ -121,18 +142,6 @@ export const drawFullHand = (ctx: CanvasRenderingContext2D, hand: AnnotatedPredi
         ctx.fillStyle = style[i].color;
         ctx.fill();
       }
-      ctx.beginPath();
-      ctx.moveTo(landmarks[8][0], landmarks[8][1]);
-      ctx.lineTo(landmarks[5][0], landmarks[5][1]);
-      ctx.strokeStyle = 'red';
-      ctx.lineWidth = 4;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(landmarks[5][0], landmarks[5][1]);
-      ctx.lineTo(landmarks[4][0], landmarks[4][1]);
-      ctx.strokeStyle = 'red';
-      ctx.lineWidth = 4;
-      ctx.stroke();
     });
   }
 };
