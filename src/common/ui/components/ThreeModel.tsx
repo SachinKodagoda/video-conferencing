@@ -13,7 +13,7 @@ type TGLTFResult = GLTF & {
   };
 };
 const ThreeModel = (): JSX.Element => {
-  const { materials, nodes } = useGLTF('./public/d.gltf') as TGLTFResult;
+  const { materials, nodes } = useGLTF('./public/3d/duck/RubberDuck.gltf') as TGLTFResult;
   return (
     <group dispose={null}>
       <group name='Camera' position={[10, 0, 50]} rotation={[Math.PI / 2, 0, 0]}>
