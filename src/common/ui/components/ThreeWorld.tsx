@@ -1,9 +1,10 @@
 import ThreeBox from '@components/ThreeBox';
+import ThreeModel from '@components/ThreeModel';
 import styles from '@components_style/ThreeWorld.module.sass';
 import { AnimationContext } from '@ctx/AnimationContext';
 import { OrthographicCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import React, { useContext } from 'react';
+import React, { Suspense, useContext } from 'react';
 
 // examples
 // https://onion2k.github.io/r3f-by-example/
@@ -31,6 +32,9 @@ const ThreeWorld = (): JSX.Element => {
         position={[0, 0, divider]}
       />
       <ThreeBox position={[handCenterX, handCenterY, 0]} zoomVal={zoomVal} />
+      <Suspense fallback={null}>
+        <ThreeModel />
+      </Suspense>
     </Canvas>
   );
 };

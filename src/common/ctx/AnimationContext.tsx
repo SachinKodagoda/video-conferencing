@@ -84,8 +84,8 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
   const top = yRatio;
   const left = -xRatio;
   const bottom = -yRatio;
-  const handCenterX = leftTopToCenter(x, videoWidth, scaler);
-  const handCenterY = leftTopToCenter(y, videoHeight, scaler);
+  const handCenterX = leftTopToCenter(x, videoWidth, scaler, 0);
+  const handCenterY = leftTopToCenter(y, videoHeight, scaler, 0);
   // degree_angle * 2 / 100 => (radian_angle * 180 * 2) / (100 * PI)
   const zoomVal = (zoomAngle * 3.6) / Math.PI;
 

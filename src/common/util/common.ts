@@ -1,5 +1,5 @@
-export const leftTopToCenter = (value: number, length: number, scaler: number): number => {
-  return length / (2 * scaler) - value / scaler;
+export const leftTopToCenter = (value: number, length: number, scaler: number, extra: number): number => {
+  return length / (2 * scaler) - (value + extra) / scaler;
 };
 
 // PI/2 = 90 Degree
