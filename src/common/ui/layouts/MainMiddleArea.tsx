@@ -48,6 +48,8 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
         drawFullHand(ctx, hand);
         // markCanvasCorners(ctx, videoWidth, videoHeight);
         const xyValues = getHandCenter(hand);
+        // eslint-disable-next-line no-console
+        // console.log('xyValues: =-->', xyValues.primaryAngle);
         if (xyValues.primaryAngle !== null) {
           setZoomAngle(xyValues.primaryAngle);
           setZoom(true);

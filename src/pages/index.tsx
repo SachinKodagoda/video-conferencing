@@ -16,8 +16,7 @@ const Index = (): JSX.Element => {
   const [videoOn, setVideoOn] = useState(false);
   const [showLeftBar, setShowLeftBar] = useState(true);
   const [showRightBar, setShowRightBar] = useState(true);
-  const { setContainerHeight, setContainerWidth, setVideoHeight, setVideoWidth, setX, setY, setZoom, setZoomAngle } =
-    useContext(AnimationContext);
+  const { setContainerHeight, setContainerWidth } = useContext(AnimationContext);
 
   useEffect(() => {
     const containerRefs = containerRef?.current as HTMLDivElement;
