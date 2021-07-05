@@ -9,8 +9,12 @@ import React, { useContext } from 'react';
 // https://onion2k.github.io/r3f-by-example/
 
 const ThreeWorld = (): JSX.Element => {
-  const { bottom, divider, left, right, top, videoHeight, videoWidth } = useContext(AnimationContext);
-
+  const { bottom, divider, handCenterX, handCenterY, left, right, top, videoHeight, videoWidth, zoomAngle, zoomVal } =
+    useContext(AnimationContext);
+  // eslint-disable-next-line no-console
+  console.log('zoomAngle: =-->', zoomAngle);
+  // eslint-disable-next-line no-console
+  console.log('handCenterX: =-->', handCenterX);
   return (
     <Canvas className={styles.newCanvas} style={{ width: videoWidth, height: videoHeight }}>
       <ambientLight />
@@ -26,7 +30,7 @@ const ThreeWorld = (): JSX.Element => {
         far={divider}
         position={[0, 0, divider]}
       />
-      <ThreeBox />
+      <ThreeBox position={[handCenterX, handCenterY, 0]} zoomVal={zoomVal} />
     </Canvas>
   );
 };
