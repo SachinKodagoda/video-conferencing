@@ -1,5 +1,13 @@
 const path = require('path');
 module.exports = {
+  webpack: (config, { isServer }) => {
+    // this i did to avoid fs errors but need to check.
+    // Fixes npm packages that depend on `fs` module
+    if (!isServer) {
+      config.resolve.fallback = { fs: false };
+    }
+    return config;
+  },
   env: {
     APP_NAME: 'Davinci',
     API_KEY: 'AIzaSyBCC6ZG9rLWUyEWsMvKbISBJj61zKY8sS8',
@@ -21,10 +29,4 @@ module.exports = {
   images: {
     domains: ['google.com'],
   },
-  // webpack: (config, { isServer }) => {
-  //   if (isServer) {
-  //     require("scripts/generate-sitemap");
-  //   }
-  //   return config;
-  // },
 };

@@ -1,5 +1,6 @@
+import { AudioContext } from '@ctx/AudioContext';
 import styles from '@layouts_style/MainBottomBar.module.sass';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 type TProps = {
   videoOn: boolean;
@@ -20,7 +21,7 @@ const MainBottomBar = ({
   const [threeMenuOn, setThreeMenuOn] = useState(false);
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
   const [streaming, setStreaming] = useState(false);
-  const [microphoneOn, setMicrophoneOn] = useState(false);
+  const { microphoneOn, recognizeCommands } = useContext(AudioContext);
 
   const videoIcon = videoOn ? 'videoCameraActive' : 'videoCamera';
   const streamingIcon = streaming ? 'streamingActive' : 'streaming';
@@ -81,7 +82,7 @@ const MainBottomBar = ({
           alt=''
           className={styles.middleIcons}
           onClick={() => {
-            setMicrophoneOn(!microphoneOn);
+            recognizeCommands();
           }}
           aria-hidden='true'
         />

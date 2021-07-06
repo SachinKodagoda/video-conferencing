@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import { AnimationContextProvider } from '@ctx/AnimationContext';
+import { AudioContextProvider } from '@ctx/AudioContext';
 import { CartContextProvider } from '@ctx/CartContext';
 import { UserContextProvider } from '@ctx/UserContext';
 import '@styles/globals.sass';
@@ -21,14 +23,19 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => {
         <meta name='description' content='Art for everyone' />
         <meta name='theme-color' content='#000' />
         <meta name='apple-mobile-web-app-status-bar-style' content='#000' />
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='true' />
+        <link href='https://fonts.googleapis.com/css2?family=Quicksand:wght@400&display=swap' rel='stylesheet' />
       </Head>
 
       <UserContextProvider>
         <CartContextProvider>
-          <AnimationContextProvider>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Component {...pageProps} />
-          </AnimationContextProvider>
+          <AudioContextProvider>
+            <AnimationContextProvider>
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+              <Component {...pageProps} />
+            </AnimationContextProvider>
+          </AudioContextProvider>
         </CartContextProvider>
       </UserContextProvider>
     </>

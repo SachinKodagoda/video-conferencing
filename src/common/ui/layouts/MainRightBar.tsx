@@ -1,17 +1,22 @@
+import EllipsisAnimator from '@components/EllipsisAnimator';
+import { AudioContext } from '@ctx/AudioContext';
 import styles from '@layouts_style/MainRightBar.module.sass';
-import React from 'react';
+import React, { useContext } from 'react';
 
 const MainRightBar = (): JSX.Element => {
+  const { action, microphoneOn } = useContext(AudioContext);
   const messageArray = [
     {
       message: 'Hi',
-      time: '',
     },
     {
       message: 'Test',
-      time: '',
     },
   ];
+  let text = 'Turn your MIC on';
+  if (microphoneOn) {
+    text = '';
+  }
   return (
     <div className={styles.videoMenuRight}>
       <div className={styles.chatItemCover}>
@@ -21,6 +26,12 @@ const MainRightBar = (): JSX.Element => {
           </div>
         ))}
       </div>
+      {microphoneOn && (
+        <div className={styles.waiting}>
+          <EllipsisAnimator text='Listening' />
+          <div>{action ? `${action}` : `${text}`}</div>
+        </div>
+      )}
       <div className={styles.chatInput}>
         <input type='text' className={styles.chatInputItem} />
       </div>
