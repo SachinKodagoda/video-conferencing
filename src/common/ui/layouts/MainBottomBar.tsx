@@ -74,7 +74,7 @@ const MainBottomBar = ({
           alt=''
           className={styles.middleIcons}
           onClick={() => {
-            // setStreaming(!streaming);
+            setStreaming(!streaming);
             SpeechRecognition.stopListening();
           }}
           aria-hidden='true'
