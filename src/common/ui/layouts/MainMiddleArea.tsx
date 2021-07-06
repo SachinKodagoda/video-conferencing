@@ -12,16 +12,7 @@ type TProps = {
 };
 
 const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
-  const {
-    setIndexThumbAngle,
-    setIsYRotationClock,
-    setShouldRotate,
-    setVideoHeight,
-    setVideoWidth,
-    setX,
-    setY,
-    setZoom,
-  } = useContext(AnimationContext);
+  const { setShouldRotate, setVideoHeight, setVideoWidth, setX, setY, setZoom } = useContext(AnimationContext);
   const showWebCam = true;
   const { containerHeight, containerWidth } = useContext(AnimationContext);
   const runHandpose = async () => {
