@@ -25,6 +25,7 @@
     "@tensorflow/tfjs-backend-webgl": "3.7.0",
     "@tensorflow/tfjs-converter": "3.7.0",
     "@tensorflow/tfjs-core": "3.7.0",
+    "@types/regenerator-runtime": "^0.13.0",
     "@types/three": "^0.130.0",
     "fingerpose": "^0.0.2",
     "firebase": "^8.7.0",
