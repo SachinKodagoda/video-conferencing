@@ -7,7 +7,8 @@ import '@styles/globals.sass';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import React from 'react';
-import 'regenerator-runtime/runtime';
+// import 'regenerator-runtime/runtime';
+// eslint-disable-next-line import/extensions
 
 const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => {
   return (
