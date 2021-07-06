@@ -1,6 +1,7 @@
 import { AudioContext } from '@ctx/AudioContext';
 import styles from '@layouts_style/MainBottomBar.module.sass';
 import React, { useContext, useState } from 'react';
+import SpeechRecognition from 'react-speech-recognition';
 
 type TProps = {
   videoOn: boolean;
@@ -21,7 +22,7 @@ const MainBottomBar = ({
   const [threeMenuOn, setThreeMenuOn] = useState(false);
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
   const [streaming, setStreaming] = useState(false);
-  const { microphoneOn, recognizeCommands } = useContext(AudioContext);
+  const { isMicDisabled, microphoneOn, setMicrophoneOn } = useContext(AudioContext);
 
   const videoIcon = videoOn ? 'videoCameraActive' : 'videoCamera';
   const streamingIcon = streaming ? 'streamingActive' : 'streaming';
@@ -73,16 +74,19 @@ const MainBottomBar = ({
           alt=''
           className={styles.middleIcons}
           onClick={() => {
-            setStreaming(!streaming);
+            // setStreaming(!streaming);
+            SpeechRecognition.stopListening();
           }}
           aria-hidden='true'
         />
         <img
           src={`/images/${microphoneIcon}.svg`}
           alt=''
-          className={styles.middleIcons}
+          className={`${styles.middleIcons} ${isMicDisabled ? styles.disabled : ''}`}
           onClick={() => {
-            recognizeCommands();
+            if (!isMicDisabled) {
+              setMicrophoneOn(prev => !prev);
+            }
           }}
           aria-hidden='true'
         />

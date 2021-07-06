@@ -31,6 +31,7 @@
     "handpose",
     "hemi",
     "preconnect",
+    "speechly",
     "tfjs",
     "unproject",
     "webgl"

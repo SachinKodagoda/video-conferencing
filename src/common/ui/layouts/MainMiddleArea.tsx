@@ -2,7 +2,7 @@ import ThreeWorld from '@components/ThreeWorld';
 import { AnimationContext } from '@ctx/AnimationContext';
 import styles from '@layouts_style/MainMiddleArea.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
-import { fullCalculation } from '@util/handPose';
+import { drawFullHand, drawZooming, fullCalculation } from '@util/handPose';
 import React, { useContext, useEffect } from 'react';
 import Webcam from 'react-webcam';
 
@@ -45,8 +45,8 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
       const hand = await net.estimateHands(videoReference);
       const ctx = canvasReference.getContext('2d');
       if (ctx) {
-        // drawZooming(ctx, hand);
-        // drawFullHand(ctx, hand);
+        drawZooming(ctx, hand);
+        drawFullHand(ctx, hand);
         // markCanvasCorners(ctx, videoWidth, videoHeight);
         const { indexDown, middleDown, pinkyDown, ringDown, thumbIn, xVal, yVal } = fullCalculation(hand);
 
