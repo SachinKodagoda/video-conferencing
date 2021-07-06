@@ -4,23 +4,28 @@ type TReturn = {
   xVal: number | null;
   yVal: number | null;
   xLen: number | null;
-  primaryAngle: number | null;
+  indexThumbAngle: number | null;
+  indexDown: boolean | null;
+  middleDown: boolean | null;
+  ringDown: boolean | null;
+  pinkyDown: boolean | null;
+  thumbIn: boolean | null;
 };
 
 type TFingerJoints = {
   thumb: number[];
-  indexFinger: number[];
-  middleFinger: number[];
-  ringFinger: number[];
+  index: number[];
+  middle: number[];
+  ring: number[];
   pinky: number[];
 };
 
 // Points for finger
 const fingerJoints: TFingerJoints = {
   thumb: [0, 1, 2, 3, 4],
-  indexFinger: [0, 5, 6, 7, 8],
-  middleFinger: [0, 9, 10, 11, 12],
-  ringFinger: [0, 13, 14, 15, 16],
+  index: [0, 5, 6, 7, 8],
+  middle: [0, 9, 10, 11, 12],
+  ring: [0, 13, 14, 15, 16],
   pinky: [0, 17, 18, 19, 20],
 };
 
@@ -68,22 +73,29 @@ const find_angle = (A: TNumArr, B: TNumArr, C: TNumArr) => {
 };
 
 // Get Hand center -->
-export const getHandCenter = (hand: AnnotatedPrediction[]): TReturn => {
+export const fullCalculation = (hand: AnnotatedPrediction[]): TReturn => {
   if (hand.length > 0) {
     const predicted = hand[0].landmarks;
     if (predicted.length > 0) {
       // [mark][x or y or z]
+      // origin is top right corner
+      //
       const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0]; // x
       const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1]; // y
       const xVal = parseFloat((xMidSum / 3).toFixed(4));
       const yVal = parseFloat((yMidSum / 3).toFixed(4));
       const xLen = predicted[17][0] - predicted[5][0];
-      const primaryAngle = find_angle(predicted[8], predicted[5], predicted[4]);
+      const indexThumbAngle = find_angle(predicted[8], predicted[5], predicted[4]);
       return {
         xVal,
         yVal,
         xLen,
-        primaryAngle,
+        indexThumbAngle,
+        indexDown: predicted[8][1] > predicted[5][1],
+        middleDown: predicted[12][1] > predicted[9][1],
+        ringDown: predicted[16][1] > predicted[13][1],
+        pinkyDown: predicted[20][1] > predicted[17][1],
+        thumbIn: predicted[4][0] < predicted[1][0],
       };
     }
   }
@@ -91,7 +103,12 @@ export const getHandCenter = (hand: AnnotatedPrediction[]): TReturn => {
     xVal: null,
     yVal: null,
     xLen: null,
-    primaryAngle: null,
+    indexThumbAngle: null,
+    indexDown: null,
+    middleDown: null,
+    ringDown: null,
+    pinkyDown: null,
+    thumbIn: null,
   };
 };
 

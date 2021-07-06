@@ -2,7 +2,7 @@ import ThreeWorld from '@components/ThreeWorld';
 import { AnimationContext } from '@ctx/AnimationContext';
 import styles from '@layouts_style/MainMiddleArea.module.sass';
 import * as handpose from '@tensorflow-models/handpose';
-import { drawZooming, getHandCenter } from '@util/handPose';
+import { fullCalculation } from '@util/handPose';
 import React, { useContext, useEffect } from 'react';
 import Webcam from 'react-webcam';
 
@@ -12,7 +12,16 @@ type TProps = {
 };
 
 const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
-  const { setVideoHeight, setVideoWidth, setX, setY, setZoom, setZoomAngle } = useContext(AnimationContext);
+  const {
+    setIndexThumbAngle,
+    setIsYRotationClock,
+    setShouldRotate,
+    setVideoHeight,
+    setVideoWidth,
+    setX,
+    setY,
+    setZoom,
+  } = useContext(AnimationContext);
   const showWebCam = true;
   const { containerHeight, containerWidth } = useContext(AnimationContext);
   const runHandpose = async () => {
@@ -45,19 +54,23 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
       const hand = await net.estimateHands(videoReference);
       const ctx = canvasReference.getContext('2d');
       if (ctx) {
-        drawZooming(ctx, hand);
+        // drawZooming(ctx, hand);
+        // drawFullHand(ctx, hand);
         // markCanvasCorners(ctx, videoWidth, videoHeight);
-        const xyValues = getHandCenter(hand);
-        if (xyValues.primaryAngle !== null) {
-          setZoomAngle(xyValues.primaryAngle);
-          setZoom(true);
-        } else {
-          setZoom(false);
+        const { indexDown, middleDown, pinkyDown, ringDown, thumbIn, xVal, yVal } = fullCalculation(hand);
+
+        if (indexDown !== null && pinkyDown !== null && ringDown !== null && middleDown !== null && thumbIn !== null) {
+          if (pinkyDown && ringDown && middleDown) {
+            setZoom(3);
+          } else {
+            setZoom(1);
+          }
+          setShouldRotate(indexDown);
         }
 
-        if (xyValues.xVal !== null && xyValues.yVal !== null) {
-          setX(xyValues.xVal);
-          setY(xyValues.yVal);
+        if (xVal !== null && yVal !== null) {
+          setX(xVal);
+          setY(yVal);
         }
       }
     }

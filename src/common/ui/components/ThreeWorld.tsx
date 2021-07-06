@@ -1,8 +1,9 @@
 import ThreeTestModel from '@components/ThreeTestModel';
 import styles from '@components_style/ThreeWorld.module.sass';
 import { AnimationContext } from '@ctx/AnimationContext';
-import { OrbitControls, OrthographicCamera } from '@react-three/drei';
+import { OrthographicCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import { leftTopToCenter } from '@util/common';
 import React, { Suspense, useContext } from 'react';
 
 // examples
@@ -10,11 +11,24 @@ import React, { Suspense, useContext } from 'react';
 // https://github.com/pmndrs/react-three-fiber/blob/master/markdown/api.md
 
 const ThreeWorld = (): JSX.Element => {
-  const { bottom, divider, handCenterX, handCenterY, left, right, top, videoHeight, videoWidth, zoomVal } =
-    useContext(AnimationContext);
+  const {
+    bottom,
+    divider,
+    isYRotationClock,
+    left,
+    right,
+    scaler,
+    shouldRotate,
+    top,
+    videoHeight,
+    videoWidth,
+    x,
+    y,
+    zoom,
+  } = useContext(AnimationContext);
+
   return (
     <Canvas className={styles.newCanvas} style={{ width: videoWidth, height: videoHeight }}>
-      <OrbitControls />
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       <OrthographicCamera
@@ -29,7 +43,12 @@ const ThreeWorld = (): JSX.Element => {
         position={[0, 0, divider]}
       />
       <Suspense fallback={null}>
-        <ThreeTestModel position={[handCenterX, handCenterY, 0]} zoomVal={zoomVal} />
+        <ThreeTestModel
+          position={[leftTopToCenter(x, videoWidth, scaler, 0), leftTopToCenter(y, videoHeight, scaler, 150), 0]}
+          zoom={zoom}
+          shouldRotate={shouldRotate}
+          isYRotationClock={isYRotationClock}
+        />
       </Suspense>
     </Canvas>
   );

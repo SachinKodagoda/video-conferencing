@@ -6,15 +6,16 @@ type TProps = {
 };
 
 interface IContext {
-  zoom: boolean;
-  zoomVal: number;
-  zoomAngle: number;
+  shouldRotate: boolean;
+  zoom: number;
+  rotationValue: number;
+  indexThumbAngle: number;
   videoWidth: number;
   videoHeight: number;
   x: number;
   y: number;
-  setZoom: React.Dispatch<React.SetStateAction<boolean>>;
-  setZoomAngle: React.Dispatch<React.SetStateAction<number>>;
+  setZoom: React.Dispatch<React.SetStateAction<number>>;
+  setIndexThumbAngle: React.Dispatch<React.SetStateAction<number>>;
   setVideoWidth: React.Dispatch<React.SetStateAction<number>>;
   setVideoHeight: React.Dispatch<React.SetStateAction<number>>;
   setX: React.Dispatch<React.SetStateAction<number>>;
@@ -31,20 +32,24 @@ interface IContext {
   handCenterY: number;
   containerWidth: number;
   containerHeight: number;
+  isYRotationClock: boolean;
   setContainerHeight: React.Dispatch<React.SetStateAction<number>>;
   setContainerWidth: React.Dispatch<React.SetStateAction<number>>;
+  setShouldRotate: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsYRotationClock: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const initContext: IContext = {
-  zoom: false,
-  zoomVal: 0,
-  zoomAngle: 0,
+  shouldRotate: false,
+  zoom: 1,
+  rotationValue: 0,
+  indexThumbAngle: 0,
   videoWidth: 0,
   videoHeight: 0,
   x: 0,
   y: 0,
   setZoom: () => null,
-  setZoomAngle: () => null,
+  setIndexThumbAngle: () => null,
   setVideoWidth: () => null,
   setVideoHeight: () => null,
   setX: () => null,
@@ -61,15 +66,20 @@ const initContext: IContext = {
   handCenterY: 0,
   containerWidth: 0,
   containerHeight: 0,
+  isYRotationClock: false,
   setContainerHeight: () => null,
   setContainerWidth: () => null,
+  setShouldRotate: () => null,
+  setIsYRotationClock: () => null,
 };
 
 export const AnimationContext = React.createContext<IContext>(initContext);
 
 export const AnimationContextProvider = ({ children }: TProps): React.ReactElement => {
   const [zoom, setZoom] = useState(initContext.zoom);
-  const [zoomAngle, setZoomAngle] = useState(initContext.zoomAngle);
+  const [shouldRotate, setShouldRotate] = useState(initContext.shouldRotate);
+  const [isYRotationClock, setIsYRotationClock] = useState(initContext.isYRotationClock);
+  const [indexThumbAngle, setIndexThumbAngle] = useState(initContext.indexThumbAngle);
   const [videoWidth, setVideoWidth] = useState(initContext.videoWidth);
   const [videoHeight, setVideoHeight] = useState(initContext.videoHeight);
   const [containerHeight, setContainerHeight] = useState(initContext.containerHeight);
@@ -86,13 +96,14 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
   const bottom = -yRatio;
   const handCenterX = leftTopToCenter(x, videoWidth, scaler, 0);
   const handCenterY = leftTopToCenter(y, videoHeight, scaler, 0);
-  // degree_angle * 2 / 100 => (radian_angle * 180 * 2) / (100 * PI)
-  const zoomVal = (zoomAngle * 3.6) / Math.PI;
+  // degree_angle * 360 / 100 => (radian_angle * 180 * 360) / (100 * PI)
+  // const rotationValue = (2 * Math.PI * indexThumbAngle) / 2;
+  const rotationValue = indexThumbAngle;
 
   const contextValue = {
     zoom,
-    zoomVal,
-    zoomAngle,
+    rotationValue,
+    indexThumbAngle,
     videoWidth,
     videoHeight,
     containerWidth,
@@ -109,14 +120,18 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
     bottom,
     handCenterX,
     handCenterY,
+    shouldRotate,
+    isYRotationClock,
     setZoom,
-    setZoomAngle,
+    setIndexThumbAngle,
     setVideoWidth,
     setVideoHeight,
     setX,
     setY,
     setContainerHeight,
     setContainerWidth,
+    setShouldRotate,
+    setIsYRotationClock,
   };
 
   return <AnimationContext.Provider value={contextValue}>{children}</AnimationContext.Provider>;

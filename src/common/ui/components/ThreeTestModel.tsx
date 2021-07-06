@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useGLTF } from '@react-three/drei';
-import { Vector3 } from '@react-three/fiber';
+import { useFrame, Vector3 } from '@react-three/fiber';
 import React, { useRef } from 'react';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
+// for more models
+// https://sketchfab.com/3d-models?features=downloadable
+
 type TProps = {
   position: Vector3;
-  zoomVal: number;
+  zoom: number;
+  shouldRotate: boolean;
+  isYRotationClock: boolean;
 };
 type TGLTFResult = GLTF & {
   nodes: {
@@ -16,11 +22,20 @@ type TGLTFResult = GLTF & {
     RedMat: THREE.MeshStandardMaterial;
   };
 };
-const ThreeModel = ({ position, zoomVal }: TProps): JSX.Element => {
-  const group = useRef();
+const ThreeModel = ({ isYRotationClock, position, shouldRotate, zoom }: TProps): JSX.Element => {
+  const group = useRef<THREE.Mesh>(null!);
   const { materials, nodes } = useGLTF('3d/angryBird/scene.gltf') as TGLTFResult;
+  useFrame(() => {
+    if (shouldRotate) {
+      if (isYRotationClock) {
+        group.current.rotation.y += 0.05;
+      } else {
+        group.current.rotation.y -= 0.05;
+      }
+    }
+  });
   return (
-    <group ref={group} dispose={null} position={position} scale={zoomVal > 1.8 ? 2 : 1}>
+    <group ref={group} dispose={null} position={position} scale={zoom}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={1.47}>
           <primitive object={nodes.Armature_rootJoint} />
