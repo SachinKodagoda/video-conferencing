@@ -1,3 +1,4 @@
+import { AnimationContext } from '@ctx/AnimationContext';
 import { AudioContext } from '@ctx/AudioContext';
 import styles from '@layouts_style/MainBottomBar.module.sass';
 import React, { useContext, useState } from 'react';
@@ -23,6 +24,7 @@ const MainBottomBar = ({
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const { isMicDisabled, microphoneOn, setMicrophoneOn } = useContext(AudioContext);
+  const { setAction, action, animate, setAnimate } = useContext(AnimationContext);
 
   const videoIcon = videoOn ? 'videoCameraActive' : 'videoCamera';
   const streamingIcon = streaming ? 'streamingActive' : 'streaming';
@@ -31,6 +33,8 @@ const MainBottomBar = ({
   const settingsMenuIcon = settingsMenuOn ? 'settingsActive' : 'settings';
   const usersIcon = showLeftBar ? 'groupActive' : 'group';
   const messageIcon = showRightBar ? 'messageActive' : 'message';
+  const TrackingIcon = action ? 'actionActive' : 'action';
+  const AnimateIcon = animate ? 'animateActive' : 'animate';
   return (
     <div className={styles.bottomBar}>
       <div className={styles.left}>
@@ -70,12 +74,32 @@ const MainBottomBar = ({
           aria-hidden='true'
         />
         <img
+          src={`/images/${TrackingIcon}.svg`}
+          alt=''
+          className={styles.middleIcons}
+          onClick={() => {
+            // Start Tracking
+            setAction(prev => !prev);
+          }}
+          aria-hidden='true'
+        />
+        <img
           src={`/images/${streamingIcon}.svg`}
           alt=''
           className={styles.middleIcons}
           onClick={() => {
             setStreaming(!streaming);
             SpeechRecognition.stopListening();
+          }}
+          aria-hidden='true'
+        />
+        <img
+          src={`/images/${AnimateIcon}.svg`}
+          alt=''
+          className={styles.middleIcons}
+          onClick={() => {
+            // Start animation
+            setAnimate(prev => !prev);
           }}
           aria-hidden='true'
         />

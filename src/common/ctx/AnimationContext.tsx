@@ -16,6 +16,10 @@ interface IContext {
   rotateX: number;
   rotateY: number;
   rotateZ: number;
+  action: boolean;
+  animate: boolean;
+  setAnimate: React.Dispatch<React.SetStateAction<boolean>>;
+  setAction: React.Dispatch<React.SetStateAction<boolean>>;
   setRotateX: React.Dispatch<React.SetStateAction<number>>;
   setRotateY: React.Dispatch<React.SetStateAction<number>>;
   setRotateZ: React.Dispatch<React.SetStateAction<number>>;
@@ -50,6 +54,10 @@ const initContext: IContext = {
   rotateX: 0,
   rotateY: 0,
   rotateZ: 0,
+  action: false,
+  animate: false,
+  setAnimate: () => false,
+  setAction: () => false,
   setRotateX: () => 0,
   setRotateY: () => 0,
   setRotateZ: () => 0,
@@ -76,6 +84,8 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
   const [rotateX, setRotateX] = useState(initContext.rotateX);
   const [rotateY, setRotateY] = useState(initContext.rotateY);
   const [rotateZ, setRotateZ] = useState(initContext.rotateZ);
+  const [action, setAction] = useState(initContext.action);
+  const [animate, setAnimate] = useState(initContext.animate);
   // const [prevX, setPrevX] = useState(initContext.prevX);
   // const [prevY, setPrevY] = useState(initContext.prevY);
   const contextValue = {
@@ -90,6 +100,10 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
     rotateX,
     rotateY,
     rotateZ,
+    action,
+    animate,
+    setAnimate,
+    setAction,
     setRotateX,
     setRotateY,
     setRotateZ,

@@ -6,7 +6,7 @@ import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils/';
 import HandLib, { Hands, InputImage } from '@mediapipe/hands';
 import { leftTopToCenter } from '@util/common';
 import { fullCalculation } from '@util/handPose';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 
 type TProps = {
@@ -25,7 +25,6 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
     setY,
     setRotateX,
     setRotateY,
-    setRotateZ,
     x,
     y,
     containerHeight,
@@ -34,10 +33,19 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
     videoHeight,
     setContainerWidth,
     setContainerHeight,
-    followHand,
+    action,
+    setAction,
   } = useContext(AnimationContext);
 
   const showWebCam = true;
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    mounted.current = action;
+    return () => {
+      mounted.current = false;
+    };
+  }, [action]);
 
   const runMediaPipe = async () => {
     if (webcamRef && canvasRef && webcamRef.current && canvasRef.current && webcamRef.current.video) {
@@ -68,12 +76,17 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
         canvasCtx?.save();
         canvasCtx?.clearRect(0, 0, videoWidth, videoHeight);
         canvasCtx?.drawImage(results.image, 0, 0, videoWidth, videoHeight);
-
-        if (results.multiHandLandmarks) {
+        if (mounted.current && results.multiHandLandmarks) {
           for (const landmarks of results.multiHandLandmarks) {
-            const { xVal, yVal, indexThumbAngle, distance } = fullCalculation(landmarks);
+            const { indexDown, pinkyDown, ringDown, middleDown, xVal, yVal, indexThumbAngle, distance } =
+              fullCalculation(landmarks);
             let left = false;
             let up = false;
+            if (indexDown !== null && middleDown !== null && ringDown !== null && pinkyDown !== null) {
+              if (middleDown && ringDown && pinkyDown) {
+                setAction(false);
+              }
+            }
 
             if (xVal !== null && yVal !== null) {
               setX(preXVal => {
@@ -105,15 +118,15 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
             if (distance && distance < 0.1) {
               setRotateX(prevRX => {
                 if (up) {
-                  return prevRX - 0.02;
+                  return prevRX - 0.05;
                 }
-                return prevRX + 0.02;
+                return prevRX + 0.05;
               });
               setRotateY(prevRY => {
                 if (left) {
-                  return prevRY - 0.02;
+                  return prevRY - 0.05;
                 }
-                return prevRY + 0.02;
+                return prevRY + 0.05;
               });
               if (canvasCtx) {
                 drawLandmarks(canvasCtx, [landmarks[8], landmarks[4]], {

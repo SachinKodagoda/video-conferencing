@@ -10,7 +10,6 @@ type TProps = {
 };
 type TGLTFResult = GLTF & {
   nodes: {
-    mixamorigHips: THREE.Mesh;
     Ch03: THREE.SkinnedMesh;
   };
   materials: {
@@ -22,7 +21,7 @@ type TGLTFResult = GLTF & {
 };
 const Heart = ({ position, scale, rotation }: TProps): JSX.Element => {
   const group = useRef<THREE.Mesh>(null!);
-  const { nodes, materials, animations } = useGLTF('3d/Heart/scene.gltf') as TGLTFResult;
+  const { nodes, animations } = useGLTF('3d/Heart/scene.gltf') as TGLTFResult;
   const { actions } = useAnimations(animations, group);
   useEffect(() => {
     // actions['Take 001']?.play();
