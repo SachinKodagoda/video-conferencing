@@ -7,14 +7,14 @@ type TProps = {
 
 interface IContext {
   shouldRotate: boolean;
-  zoom: number;
+  scale: number;
   rotationValue: number;
   indexThumbAngle: number;
   videoWidth: number;
   videoHeight: number;
   x: number;
   y: number;
-  setZoom: React.Dispatch<React.SetStateAction<number>>;
+  setScale: React.Dispatch<React.SetStateAction<number>>;
   setIndexThumbAngle: React.Dispatch<React.SetStateAction<number>>;
   setVideoWidth: React.Dispatch<React.SetStateAction<number>>;
   setVideoHeight: React.Dispatch<React.SetStateAction<number>>;
@@ -33,22 +33,26 @@ interface IContext {
   containerWidth: number;
   containerHeight: number;
   isYRotationClock: boolean;
+  width: number;
+  height: number;
   setContainerHeight: React.Dispatch<React.SetStateAction<number>>;
   setContainerWidth: React.Dispatch<React.SetStateAction<number>>;
   setShouldRotate: React.Dispatch<React.SetStateAction<boolean>>;
   setIsYRotationClock: React.Dispatch<React.SetStateAction<boolean>>;
+  setWidth: React.Dispatch<React.SetStateAction<number>>;
+  setHeight: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const initContext: IContext = {
   shouldRotate: false,
-  zoom: 1,
+  scale: 1,
   rotationValue: 0,
   indexThumbAngle: 0,
   videoWidth: 0,
   videoHeight: 0,
   x: 0,
   y: 0,
-  setZoom: () => null,
+  setScale: () => null,
   setIndexThumbAngle: () => null,
   setVideoWidth: () => null,
   setVideoHeight: () => null,
@@ -67,16 +71,20 @@ const initContext: IContext = {
   containerWidth: 0,
   containerHeight: 0,
   isYRotationClock: false,
+  width: 0,
+  height: 0,
   setContainerHeight: () => null,
   setContainerWidth: () => null,
   setShouldRotate: () => null,
   setIsYRotationClock: () => null,
+  setWidth: () => null,
+  setHeight: () => null,
 };
 
 export const AnimationContext = React.createContext<IContext>(initContext);
 
 export const AnimationContextProvider = ({ children }: TProps): React.ReactElement => {
-  const [zoom, setZoom] = useState(initContext.zoom);
+  const [scale, setScale] = useState(initContext.scale);
   const [shouldRotate, setShouldRotate] = useState(initContext.shouldRotate);
   const [isYRotationClock, setIsYRotationClock] = useState(initContext.isYRotationClock);
   const [indexThumbAngle, setIndexThumbAngle] = useState(initContext.indexThumbAngle);
@@ -86,22 +94,24 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
   const [containerWidth, setContainerWidth] = useState(initContext.containerWidth);
   const [x, setX] = useState(initContext.x);
   const [y, setY] = useState(initContext.y);
+  const [width, setWidth] = useState(initContext.width);
+  const [height, setHeight] = useState(initContext.height);
   const scaler = 100;
   const divider = scaler * 2;
-  const xRatio = videoWidth / divider;
-  const yRatio = videoHeight / divider;
+  const xRatio = width / divider;
+  const yRatio = height / divider;
   const right = xRatio;
   const top = yRatio;
   const left = -xRatio;
   const bottom = -yRatio;
-  const handCenterX = leftTopToCenter(x, videoWidth, scaler, 0);
-  const handCenterY = leftTopToCenter(y, videoHeight, scaler, 0);
+  const handCenterX = leftTopToCenter(x, width, scaler, 0);
+  const handCenterY = leftTopToCenter(y, height, scaler, 0);
   // degree_angle * 360 / 100 => (radian_angle * 180 * 360) / (100 * PI)
   // const rotationValue = (2 * Math.PI * indexThumbAngle) / 2;
   const rotationValue = indexThumbAngle;
 
   const contextValue = {
-    zoom,
+    scale,
     rotationValue,
     indexThumbAngle,
     videoWidth,
@@ -122,7 +132,9 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
     handCenterY,
     shouldRotate,
     isYRotationClock,
-    setZoom,
+    width,
+    height,
+    setScale,
     setIndexThumbAngle,
     setVideoWidth,
     setVideoHeight,
@@ -132,6 +144,8 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
     setContainerWidth,
     setShouldRotate,
     setIsYRotationClock,
+    setWidth,
+    setHeight,
   };
 
   return <AnimationContext.Provider value={contextValue}>{children}</AnimationContext.Provider>;

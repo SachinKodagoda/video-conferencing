@@ -1,8 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import { AnimationContextProvider } from '@ctx/AnimationContext';
 import { AudioContextProvider } from '@ctx/AudioContext';
-import { CartContextProvider } from '@ctx/CartContext';
-import { UserContextProvider } from '@ctx/UserContext';
 import '@styles/globals.sass';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -28,17 +26,12 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => {
         <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='true' />
         <link href='https://fonts.googleapis.com/css2?family=Quicksand:wght@400&display=swap' rel='stylesheet' />
       </Head>
-
-      <UserContextProvider>
-        <CartContextProvider>
-          <AudioContextProvider>
-            <AnimationContextProvider>
-              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-              <Component {...pageProps} />
-            </AnimationContextProvider>
-          </AudioContextProvider>
-        </CartContextProvider>
-      </UserContextProvider>
+      <AudioContextProvider>
+        <AnimationContextProvider>
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <Component {...pageProps} />
+        </AnimationContextProvider>
+      </AudioContextProvider>
     </>
   );
 };

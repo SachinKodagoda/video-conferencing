@@ -125,8 +125,12 @@ export const UserContextProvider = ({ children }: TProps): React.ReactElement =>
     });
     // turn off realtime subscription
     return () => {
-      referenceSubscription();
-      authStateSubscription();
+      if (referenceSubscription) {
+        referenceSubscription();
+      }
+      if (authStateSubscription) {
+        authStateSubscription();
+      }
     };
   }, []);
 
