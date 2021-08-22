@@ -1,3 +1,4 @@
+import HandLib from '@mediapipe/hands';
 import { AnnotatedPrediction } from '@tensorflow-models/handpose';
 
 type TReturn = {
@@ -10,6 +11,7 @@ type TReturn = {
   ringDown: boolean | null;
   pinkyDown: boolean | null;
   thumbIn: boolean | null;
+  distance: number | null;
 };
 
 type TFingerJoints = {
@@ -56,48 +58,53 @@ const style = {
 
 // Draw the center of the hand -->
 export const drawHandCenter = (ctx: CanvasRenderingContext2D, x: number, y: number): void => {
-  ctx.beginPath();
-  ctx.arc(x, y, 10, 0, 3 * Math.PI);
-  ctx.fillStyle = 'red';
-  ctx.fill();
+  if (ctx && x && y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 10, 0, 3 * Math.PI);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+  }
 };
 
-type TNumArr = [number, number, number];
+type TPoints = {
+  x: number;
+  y: number;
+  z: number;
+};
 
-const find_angle = (A: TNumArr, B: TNumArr, C: TNumArr) => {
-  // ABC triangle.. Checking angle at B (in radian)
-  const c = Math.sqrt((B[0] - A[0]) ** 2 + (B[1] - A[1]) ** 2);
-  const a = Math.sqrt((B[0] - C[0]) ** 2 + (B[1] - C[1]) ** 2);
-  const b = Math.sqrt((C[0] - A[0]) ** 2 + (C[1] - A[1]) ** 2);
-  return Math.acos((a * a + c * c - b * b) / (2 * a * c));
+const find_angle = (A: TPoints, B: TPoints, C: TPoints) => {
+  const AB = Math.sqrt((B.x - A.x) ** 2 + (B.y - A.y) ** 2);
+  const BC = Math.sqrt((B.x - C.x) ** 2 + (B.y - C.y) ** 2);
+  const AC = Math.sqrt((C.x - A.x) ** 2 + (C.y - A.y) ** 2);
+  return Math.acos((BC * BC + AB * AB - AC * AC) / (2 * BC * AB));
 };
 
 // Get Hand center -->
-export const fullCalculation = (hand: AnnotatedPrediction[]): TReturn => {
-  if (hand.length > 0) {
-    const predicted = hand[0].landmarks;
-    if (predicted.length > 0) {
-      // [mark][x or y or z]
-      // origin is top right corner
-      //
-      const xMidSum = predicted[0][0] + predicted[5][0] + predicted[17][0]; // x
-      const yMidSum = predicted[0][1] + predicted[5][1] + predicted[17][1]; // y
-      const xVal = parseFloat((xMidSum / 3).toFixed(4));
-      const yVal = parseFloat((yMidSum / 3).toFixed(4));
-      const xLen = predicted[17][0] - predicted[5][0];
-      const indexThumbAngle = find_angle(predicted[8], predicted[5], predicted[4]);
-      return {
-        xVal,
-        yVal,
-        xLen,
-        indexThumbAngle,
-        indexDown: predicted[8][1] > predicted[5][1],
-        middleDown: predicted[12][1] > predicted[9][1],
-        ringDown: predicted[16][1] > predicted[13][1],
-        pinkyDown: predicted[20][1] > predicted[17][1],
-        thumbIn: predicted[4][0] < predicted[1][0],
-      };
-    }
+export const fullCalculation = (predicted: HandLib.NormalizedLandmarkList): TReturn => {
+  if (predicted.length > 0) {
+    const xMidSum = predicted[0].x + predicted[5].x + predicted[17].x; // x
+    const yMidSum = predicted[0].y + predicted[5].y + predicted[17].y; // y
+    const xVal = parseFloat((xMidSum / 3).toFixed(4));
+    const yVal = parseFloat((yMidSum / 3).toFixed(4));
+    const xLen = predicted[17].x - predicted[5].x;
+    const indexThumbAngle = find_angle(predicted[8], predicted[5], predicted[4]) / Math.PI;
+    const distance = Math.sqrt(
+      (predicted[8].x - predicted[4].x) ** 2 +
+        (predicted[8].y - predicted[4].y) ** 2 +
+        (predicted[8].z - predicted[4].z) ** 2
+    );
+    return {
+      xVal,
+      yVal,
+      xLen,
+      indexThumbAngle,
+      indexDown: predicted[8].y > predicted[5].y,
+      middleDown: predicted[12].y > predicted[9].y,
+      ringDown: predicted[16].y > predicted[13].y,
+      pinkyDown: predicted[20].y > predicted[17].y,
+      thumbIn: predicted[4].x < predicted[1].x,
+      distance,
+    };
   }
   return {
     xVal: null,
@@ -109,6 +116,7 @@ export const fullCalculation = (hand: AnnotatedPrediction[]): TReturn => {
     ringDown: null,
     pinkyDown: null,
     thumbIn: null,
+    distance: null,
   };
 };
 

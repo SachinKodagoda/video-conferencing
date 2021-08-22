@@ -11,7 +11,6 @@ import Webcam from 'react-webcam';
 const Index = (): JSX.Element => {
   const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const [videoOn, setVideoOn] = useState(false);
   const [showLeftBar, setShowLeftBar] = useState(true);
   const [showRightBar, setShowRightBar] = useState(true);
@@ -21,7 +20,7 @@ const Index = (): JSX.Element => {
       <div className={styles.videoContainer}>
         <div className={styles.videoContainerInner}>
           {showLeftBar && <MainLeftBar />}
-          <div ref={containerRef} className={styles.videoMenuMiddle}>
+          <div className={styles.videoMenuMiddle}>
             {videoOn ? <MainMiddleArea canvasRef={canvasRef} webcamRef={webcamRef} /> : <MainMiddlePlaceHolder />}
           </div>
           {showRightBar && <MainRightBar />}
