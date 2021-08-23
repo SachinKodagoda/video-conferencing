@@ -4,7 +4,6 @@ import styles from '@layouts_style/MainMiddleArea.module.sass';
 import * as cam from '@mediapipe/camera_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils/';
 import HandLib, { Hands, InputImage } from '@mediapipe/hands';
-import { leftTopToCenter } from '@util/common';
 import { fullCalculation } from '@util/handPose';
 import React, { useContext, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
@@ -25,16 +24,12 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
     setY,
     setRotateX,
     setRotateY,
-    x,
-    y,
     containerHeight,
     containerWidth,
-    videoWidth,
-    videoHeight,
     setContainerWidth,
     setContainerHeight,
     action,
-    setAction,
+    setAnimate,
   } = useContext(AnimationContext);
 
   const showWebCam = true;
@@ -76,18 +71,16 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
         canvasCtx?.save();
         canvasCtx?.clearRect(0, 0, videoWidth, videoHeight);
         canvasCtx?.drawImage(results.image, 0, 0, videoWidth, videoHeight);
+        setAnimate(true);
         if (mounted.current && results.multiHandLandmarks) {
           for (const landmarks of results.multiHandLandmarks) {
-            const { indexDown, pinkyDown, ringDown, middleDown, xVal, yVal, indexThumbAngle, distance } =
+            const { pinkyDown, ringDown, middleDown, xVal, yVal, indexThumbAngle, distance } =
               fullCalculation(landmarks);
             let left = false;
             let up = false;
-            if (indexDown !== null && middleDown !== null && ringDown !== null && pinkyDown !== null) {
-              if (middleDown && ringDown && pinkyDown) {
-                setAction(false);
-              }
-            }
+            setAnimate(false);
 
+            // 🏃‍♂️ X,Y Position 🔥🔥🔥🔥
             if (xVal !== null && yVal !== null) {
               setX(preXVal => {
                 const newX = xVal * videoWidth;
@@ -101,6 +94,7 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
               });
             }
 
+            // 🔍 Zoom 🔥🔥🔥🔥
             if (indexThumbAngle && indexThumbAngle > 0.7) {
               setZoom(zoom => {
                 if (left) {
@@ -115,18 +109,14 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
                 });
               }
             }
+
+            // 🔁 Rotate around Y axis 🔥🔥🔥🔥
             if (distance && distance < 0.1) {
-              setRotateX(prevRX => {
-                if (up) {
-                  return prevRX - 0.05;
-                }
-                return prevRX + 0.05;
-              });
               setRotateY(prevRY => {
                 if (left) {
-                  return prevRY - 0.05;
+                  return prevRY + 0.05;
                 }
-                return prevRY + 0.05;
+                return prevRY - 0.05;
               });
               if (canvasCtx) {
                 drawLandmarks(canvasCtx, [landmarks[8], landmarks[4]], {
@@ -134,6 +124,16 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
                   lineWidth: 30,
                 });
               }
+            }
+
+            // 🔃 Rotate around X axis 🔥🔥🔥🔥
+            if (middleDown && ringDown && pinkyDown) {
+              setRotateX(prevRX => {
+                if (up) {
+                  return prevRX - 0.05;
+                }
+                return prevRX + 0.05;
+              });
             }
           }
         }
@@ -179,15 +179,6 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
       )}
       <canvas ref={canvasRef} className={styles.canvasObject} />
       <ThreeWorld />
-      <div className={styles.test}>
-        {x}
-        <br />
-        {leftTopToCenter(x, videoWidth, 1, 0)}
-        <br />
-        {y}
-        <br />
-        {leftTopToCenter(y, videoHeight, 1, 0)}
-      </div>
     </div>
   );
 };
