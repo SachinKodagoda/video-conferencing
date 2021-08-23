@@ -22,7 +22,7 @@ type TGLTFResult = GLTF & {
     Armada: THREE.AnimationAction;
   };
 };
-const Heart = ({ rotateZ, rotateX, rotateY, scale }: TProps): JSX.Element => {
+const Heart = ({ rotateZ, rotateX, rotateY, scale, position }: TProps): JSX.Element => {
   const group = useRef<THREE.Mesh>(null!);
   const { nodes, animations } = useGLTF('3d/Heart/scene.gltf') as TGLTFResult;
   const { actions } = useAnimations(animations, group);
@@ -30,7 +30,7 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale }: TProps): JSX.Element => {
     actions['Take 001']?.play();
   });
   return (
-    <group ref={group} dispose={null} scale={scale}>
+    <group ref={group} dispose={null} scale={scale} position={position}>
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>
         <mesh
           name='0'

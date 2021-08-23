@@ -2,17 +2,14 @@ import Heart from '@components/Heart';
 import styles from '@components_style/ThreeWorld.module.sass';
 import { AnimationContext } from '@ctx/AnimationContext';
 import { PerspectiveCamera } from '@react-three/drei';
-import { Canvas, Vector3 } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import { leftTopToCenter } from '@util/common';
 import React, { Suspense, useContext, useRef } from 'react';
 
 const ThreeWorld = (): JSX.Element => {
-  const { videoWidth, videoHeight, zoom, x, y, followHand, rotateX, rotateY, rotateZ, animate } =
+  const { videoWidth, videoHeight, zoom, rotateX, rotateY, rotateZ, animate, handY, handX } =
     useContext(AnimationContext);
   const threeDCanvas = useRef(null);
-  const position: Vector3 = followHand
-    ? [leftTopToCenter(x, videoWidth, 0.5, 0), leftTopToCenter(y, videoHeight, 0.5, 0), 0]
-    : [0, 0, 0];
   return (
     <Canvas className={styles.threeDCanvas} ref={threeDCanvas}>
       <ambientLight intensity={0.4} />
@@ -28,7 +25,7 @@ const ThreeWorld = (): JSX.Element => {
       {/* <OrbitControls /> */}
       <Suspense fallback={null}>
         <Heart
-          position={position}
+          position={[leftTopToCenter(handX, videoWidth, 2, 0), leftTopToCenter(handY, videoHeight, 2, 0), 0]}
           scale={zoom}
           rotateX={rotateX}
           rotateY={rotateY}

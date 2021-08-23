@@ -29,10 +29,15 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
     setContainerWidth,
     setContainerHeight,
     action,
+    followHand,
+    setFollowHand,
+    setHandX,
+    setHandY,
   } = useContext(AnimationContext);
 
   const showWebCam = true;
   const mounted = useRef(false);
+  const followHandRef = useRef(false);
 
   useEffect(() => {
     mounted.current = action;
@@ -40,6 +45,13 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
       mounted.current = false;
     };
   }, [action]);
+
+  useEffect(() => {
+    followHandRef.current = followHand;
+    return () => {
+      followHandRef.current = false;
+    };
+  }, [followHand]);
 
   const runMediaPipe = async () => {
     if (webcamRef && canvasRef && webcamRef.current && canvasRef.current && webcamRef.current.video) {
@@ -72,12 +84,12 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
         canvasCtx?.drawImage(results.image, 0, 0, videoWidth, videoHeight);
         if (mounted.current && results.multiHandLandmarks) {
           for (const landmarks of results.multiHandLandmarks) {
-            const { pinkyDown, ringDown, middleDown, xVal, yVal, indexThumbAngle, distance } =
+            const { indexDown, pinkyDown, ringDown, middleDown, xVal, yVal, indexThumbAngle, distance } =
               fullCalculation(landmarks);
             let left = false;
             let up = false;
 
-            // 🏃‍♂️ X,Y Position 🔥🔥🔥🔥
+            // 🏃‍♂️ - 👋 X,Y Position 🔥🔥🔥🔥
             if (xVal !== null && yVal !== null) {
               setX(preXVal => {
                 const newX = xVal * videoWidth;
@@ -89,9 +101,13 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
                 up = preYVal - newY > 0 ? true : false;
                 return newY;
               });
+              if (followHandRef.current) {
+                setHandX(xVal * videoWidth);
+                setHandY(yVal * videoHeight);
+              }
             }
 
-            // 🔍 Zoom 🔥🔥🔥🔥
+            // 🔍 - ✋ Zoom 🔥🔥🔥🔥
             if (indexThumbAngle && indexThumbAngle > 0.7) {
               setZoom(zoom => {
                 if (left) {
@@ -107,7 +123,7 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
               }
             }
 
-            // 🔁 Rotate around Y axis 🔥🔥🔥🔥
+            // 🔁 - 🤏 Rotate around Y axis 🔥🔥🔥🔥
             if (distance && distance < 0.1) {
               setRotateY(prevRY => {
                 if (left) {
@@ -123,7 +139,7 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
               }
             }
 
-            // 🔃 Rotate around X axis 🔥🔥🔥🔥
+            // 🔃 -👆 Rotate around X axis 🔥🔥🔥🔥
             if (middleDown && ringDown && pinkyDown) {
               setRotateX(prevRX => {
                 if (up) {
@@ -131,6 +147,11 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
                 }
                 return prevRX + 0.05;
               });
+            }
+
+            // 🤟 Hand follow stop 🔥🔥🔥🔥
+            if (indexDown && middleDown && ringDown && pinkyDown !== null && !pinkyDown) {
+              setFollowHand(false);
             }
           }
         }

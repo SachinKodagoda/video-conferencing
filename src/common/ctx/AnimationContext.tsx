@@ -15,6 +15,8 @@ interface IContext {
   zoom: number;
   x: number;
   y: number;
+  handX: number;
+  handY: number;
   action: boolean;
   animate: boolean;
   followHand: boolean;
@@ -28,6 +30,8 @@ interface IContext {
   setZoom: React.Dispatch<React.SetStateAction<number>>;
   setX: React.Dispatch<React.SetStateAction<number>>;
   setY: React.Dispatch<React.SetStateAction<number>>;
+  setHandX: React.Dispatch<React.SetStateAction<number>>;
+  setHandY: React.Dispatch<React.SetStateAction<number>>;
   setAction: React.Dispatch<React.SetStateAction<boolean>>;
   setAnimate: React.Dispatch<React.SetStateAction<boolean>>;
   setFollowHand: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,9 +48,11 @@ const initContext: IContext = {
   zoom: 1,
   x: 0,
   y: 0,
+  handX: 0,
+  handY: 0,
   action: false,
   animate: false,
-  followHand: false,
+  followHand: true,
   setVideoWidth: () => null,
   setVideoHeight: () => null,
   setContainerHeight: () => null,
@@ -57,6 +63,8 @@ const initContext: IContext = {
   setZoom: () => null,
   setX: () => null,
   setY: () => null,
+  setHandX: () => 0,
+  setHandY: () => 0,
   setAction: () => false,
   setAnimate: () => false,
   setFollowHand: () => false,
@@ -75,6 +83,8 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
   const [zoom, setZoom] = useState(initContext.zoom);
   const [x, setX] = useState(initContext.x);
   const [y, setY] = useState(initContext.y);
+  const [handX, setHandX] = useState(initContext.handX);
+  const [handY, setHandY] = useState(initContext.handY);
   const [action, setAction] = useState(initContext.action);
   const [animate, setAnimate] = useState(initContext.animate);
   const [followHand, setFollowHand] = useState(initContext.followHand);
@@ -89,6 +99,8 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
     zoom,
     x,
     y,
+    handX,
+    handY,
     action,
     animate,
     followHand,
@@ -102,6 +114,8 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
     setZoom,
     setX,
     setY,
+    setHandX,
+    setHandY,
     setAction,
     setAnimate,
     setFollowHand,
