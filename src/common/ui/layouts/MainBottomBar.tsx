@@ -24,7 +24,7 @@ const MainBottomBar = ({
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const { isMicDisabled, microphoneOn, setMicrophoneOn } = useContext(AudioContext);
-  const { setAction, action, animate, setAnimate } = useContext(AnimationContext);
+  const { setAction, action, followHand, setFollowHand } = useContext(AnimationContext);
 
   const videoIcon = videoOn ? 'videoCameraActive' : 'videoCamera';
   const streamingIcon = streaming ? 'streamingActive' : 'streaming';
@@ -34,7 +34,7 @@ const MainBottomBar = ({
   const usersIcon = showLeftBar ? 'groupActive' : 'group';
   const messageIcon = showRightBar ? 'messageActive' : 'message';
   const TrackingIcon = action ? 'actionActive' : 'action';
-  const AnimateIcon = animate ? 'animateActive' : 'animate';
+  const AnimateIcon = followHand ? 'handActive' : 'hand';
   return (
     <div className={styles.bottomBar}>
       <div className={styles.left}>
@@ -99,7 +99,7 @@ const MainBottomBar = ({
           className={styles.middleIcons}
           onClick={() => {
             // Start animation
-            setAnimate(prev => !prev);
+            setFollowHand(prev => !prev);
           }}
           aria-hidden='true'
         />

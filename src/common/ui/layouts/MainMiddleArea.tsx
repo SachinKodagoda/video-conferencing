@@ -29,7 +29,6 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
     setContainerWidth,
     setContainerHeight,
     action,
-    setAnimate,
   } = useContext(AnimationContext);
 
   const showWebCam = true;
@@ -71,14 +70,12 @@ const MainMiddleArea = ({ canvasRef, webcamRef }: TProps): JSX.Element => {
         canvasCtx?.save();
         canvasCtx?.clearRect(0, 0, videoWidth, videoHeight);
         canvasCtx?.drawImage(results.image, 0, 0, videoWidth, videoHeight);
-        setAnimate(true);
         if (mounted.current && results.multiHandLandmarks) {
           for (const landmarks of results.multiHandLandmarks) {
             const { pinkyDown, ringDown, middleDown, xVal, yVal, indexThumbAngle, distance } =
               fullCalculation(landmarks);
             let left = false;
             let up = false;
-            setAnimate(false);
 
             // 🏃‍♂️ X,Y Position 🔥🔥🔥🔥
             if (xVal !== null && yVal !== null) {
