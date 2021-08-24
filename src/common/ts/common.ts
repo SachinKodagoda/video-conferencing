@@ -1,3 +1,5 @@
+import { Euler, Vector3 } from '@react-three/fiber';
+
 export type TTab = 'quantity' | 'size' | 'upload' | 'cart';
 export type TInputValue = string | number | null;
 export type TCurrency = 'dollar' | 'euro';
@@ -44,3 +46,17 @@ export type THand = [
   handInViewConfidence: number,
   landmarks: TLandmarks
 ];
+
+export type TTextData = {
+  text: string;
+  position: Vector3;
+  rotation: Euler;
+  display: boolean;
+  number: boolean;
+  numberVal: string;
+  align: number | 'center' | 'left' | 'right' | undefined;
+};
+
+export type TTextObj = {
+  [index: string]: TTextData;
+};
