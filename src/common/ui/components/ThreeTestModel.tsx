@@ -24,7 +24,7 @@ type TGLTFResult = GLTF & {
 };
 const ThreeModel = ({ isYRotationClock, position, shouldRotate, scale }: TProps): JSX.Element => {
   const group = useRef<THREE.Mesh>(null!);
-  const { materials, nodes } = useGLTF('3d/angryBird/scene.gltf') as TGLTFResult;
+  const { materials, nodes } = useGLTF('3d/angryBird/scene.glb') as TGLTFResult;
 
   // useFrame(() => {
   //   if (shouldRotate) {

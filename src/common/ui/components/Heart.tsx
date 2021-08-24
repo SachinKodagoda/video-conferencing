@@ -24,13 +24,13 @@ type TGLTFResult = GLTF & {
 };
 const Heart = ({ rotateZ, rotateX, rotateY, scale, position }: TProps): JSX.Element => {
   const group = useRef<THREE.Mesh>(null!);
-  const { nodes, animations } = useGLTF('3d/Heart/scene.gltf') as TGLTFResult;
+  const { nodes, animations } = useGLTF('3d/Heart/heart.glb') as TGLTFResult;
   const { actions } = useAnimations(animations, group);
   useEffect(() => {
     actions['Take 001']?.play();
   });
   return (
-    <group ref={group} dispose={null} scale={scale} position={position}>
+    <group ref={group} dispose={null} scale={scale} position={position} rotation={[rotateX, rotateY, rotateZ]}>
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>
         <mesh
           name='0'
@@ -51,6 +51,7 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position }: TProps): JSX.Elem
       </group>
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>
         <mesh
+          name='2'
           geometry={nodes['heart_03_Material_#57_0'].geometry}
           material={nodes['heart_03_Material_#57_0'].material}
         />

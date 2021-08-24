@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type TProps = {
   children: JSX.Element;
@@ -52,7 +52,7 @@ const initContext: IContext = {
   handY: 0,
   action: false,
   animate: false,
-  followHand: true,
+  followHand: false,
   setVideoWidth: () => null,
   setVideoHeight: () => null,
   setContainerHeight: () => null,
@@ -88,6 +88,10 @@ export const AnimationContextProvider = ({ children }: TProps): React.ReactEleme
   const [action, setAction] = useState(initContext.action);
   const [animate, setAnimate] = useState(initContext.animate);
   const [followHand, setFollowHand] = useState(initContext.followHand);
+  useEffect(() => {
+    setHandX(videoWidth / 2);
+    setHandY(videoHeight / 2);
+  }, [videoWidth, videoHeight]);
   const contextValue = {
     videoWidth,
     videoHeight,
