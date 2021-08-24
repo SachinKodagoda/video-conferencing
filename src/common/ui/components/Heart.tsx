@@ -45,7 +45,9 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
           outlineOpacity={2}
           anchorX={textObj[tIndex].align}
           anchorY='middle'>
-          {`${textObj[tIndex].number ? textObj[tIndex].numberVal : textObj[tIndex].text}`}
+          {`${textObj[tIndex].align === 'left' ? '<--' : ''}${
+            textObj[tIndex].number ? textObj[tIndex].numberVal : textObj[tIndex].text
+          }${textObj[tIndex].align === 'right' ? '-->' : ''}`}
         </Text>
       </Billboard>
     );

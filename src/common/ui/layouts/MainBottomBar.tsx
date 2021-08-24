@@ -24,7 +24,7 @@ const MainBottomBar = ({
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const { isMicDisabled, microphoneOn, setMicrophoneOn } = useContext(AudioContext);
-  const { setAction, action, followHand, setFollowHand } = useContext(AnimationContext);
+  const { setAction, action, followHand, setFollowHand, textObj } = useContext(AnimationContext);
 
   const videoIcon = videoOn ? 'videoCameraActive' : 'videoCamera';
   const streamingIcon = streaming ? 'streamingActive' : 'streaming';
@@ -38,6 +38,25 @@ const MainBottomBar = ({
   return (
     <div className={styles.bottomBar}>
       <div className={styles.left}>
+        <span className={styles.popupMenuCover}>
+          <div className={styles.popupMenu}>
+            {Object.entries(textObj).map((item, i) => {
+              return <div key={`SelectionRow-${i + 1}`}>{item[1].text}</div>;
+            })}
+          </div>
+          <img
+            src={`/images/${settingsMenuIcon}.svg`}
+            alt=''
+            className={styles.leftIcons}
+            onMouseEnter={() => {
+              setSettingsMenuOn(true);
+            }}
+            onMouseLeave={() => {
+              setSettingsMenuOn(false);
+            }}
+            aria-hidden='true'
+          />
+        </span>
         <img
           src={`/images/${threeMenuIcon}.svg`}
           alt=''
@@ -48,18 +67,6 @@ const MainBottomBar = ({
           onMouseLeave={() => {
             setThreeMenuOn(false);
           }}
-        />
-        <img
-          src={`/images/${settingsMenuIcon}.svg`}
-          alt=''
-          className={styles.leftIcons}
-          onMouseEnter={() => {
-            setSettingsMenuOn(true);
-          }}
-          onMouseLeave={() => {
-            setSettingsMenuOn(false);
-          }}
-          aria-hidden='true'
         />
       </div>
       <div className={styles.middle}>
