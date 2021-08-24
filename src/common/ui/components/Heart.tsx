@@ -29,6 +29,27 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
   const group = useRef<THREE.Mesh>(null!);
   const { nodes, animations } = useGLTF('3d/Heart/heart.glb') as TGLTFResult;
   const { actions } = useAnimations(animations, group);
+  const addLabel = (tIndex: string) => {
+    return (
+      <Billboard
+        follow={true}
+        position={textObj[tIndex].position}
+        lockX={true}
+        lockY={true}
+        lockZ={true}
+        rotation={textObj[tIndex].rotation}>
+        <Text
+          fontSize={20}
+          outlineWidth={'5%'}
+          outlineColor='#000000'
+          outlineOpacity={2}
+          anchorX={textObj[tIndex].align}
+          anchorY='middle'>
+          {`${textObj[tIndex].number ? textObj[tIndex].numberVal : textObj[tIndex].text}`}
+        </Text>
+      </Billboard>
+    );
+  };
   useEffect(() => {
     actions['Take 001']?.play();
   });
@@ -43,59 +64,13 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
           morphTargetDictionary={nodes['0'].morphTargetDictionary}
           morphTargetInfluences={nodes['0'].morphTargetInfluences}
         />
-        <Billboard follow={true} position={[125, 0, 0]} lockX={true} lockY={true} lockZ={true} rotation={[0, -300, 0]}>
-          <Text
-            fontSize={20}
-            outlineWidth={'5%'}
-            outlineColor='#000000'
-            outlineOpacity={1}
-            anchorX='center'
-            anchorY='middle'>
-            {` test`}
-          </Text>
-        </Billboard>
-        <Billboard
-          follow={true}
-          position={[60, 100, -80]}
-          lockX={true}
-          lockY={true}
-          lockZ={true}
-          rotation={[0, -300, 0]}>
-          <Text
-            fontSize={20}
-            outlineWidth={'5%'}
-            outlineColor='#000000'
-            outlineOpacity={1}
-            anchorX='center'
-            anchorY='middle'>
-            {` test`}
-          </Text>
-        </Billboard>
-        {textObj['right_coronary_artery'].display && (
-          <Billboard
-            follow={true}
-            position={textObj['right_coronary_artery'].position}
-            lockX={true}
-            lockY={true}
-            lockZ={true}
-            rotation={textObj['right_coronary_artery'].rotation}>
-            <Text
-              fontSize={20}
-              outlineWidth={'5%'}
-              outlineColor='#000000'
-              outlineOpacity={2}
-              anchorX={textObj['right_coronary_artery'].align}
-              anchorY='middle'>
-              {`${
-                textObj['right_coronary_artery'].number
-                  ? textObj['right_coronary_artery'].numberVal
-                  : textObj['right_coronary_artery'].text
-              }`}
-            </Text>
-          </Billboard>
-        )}
+        {textObj['right_coronary_artery'].display && addLabel('right_coronary_artery')}
+        {textObj['left_ventricle'].display && addLabel('left_ventricle')}
+        {textObj['left_cardiac_vain'].display && addLabel('left_cardiac_vain')}
+        {textObj['pulmonary_trunk'].display && addLabel('pulmonary_trunk')}
+        {textObj['right_ventricle'].display && addLabel('right_ventricle')}
       </group>
-      {/* Middle Part ---> */}
+      {/* Neck Part ---> */}
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>
         <mesh
           name='1'
@@ -104,94 +79,14 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
           morphTargetDictionary={nodes['1'].morphTargetDictionary}
           morphTargetInfluences={nodes['1'].morphTargetInfluences}
         />
-        {textObj['left_atrium'].display && (
-          <Billboard
-            follow={true}
-            position={textObj['left_atrium'].position}
-            lockX={true}
-            lockY={true}
-            lockZ={true}
-            rotation={textObj['left_atrium'].rotation}>
-            <Text
-              fontSize={20}
-              outlineWidth={'5%'}
-              outlineColor='#000000'
-              outlineOpacity={0}
-              anchorX={textObj['left_atrium'].align}
-              anchorY='middle'>
-              {`${textObj['left_atrium'].number ? textObj['left_atrium'].numberVal : textObj['left_atrium'].text}`}
-            </Text>
-          </Billboard>
-        )}
-        {textObj['left_pulmonary_artery1'].display && (
-          <Billboard
-            follow={true}
-            position={textObj['left_pulmonary_artery1'].position}
-            lockX={true}
-            lockY={true}
-            lockZ={true}
-            rotation={textObj['left_pulmonary_artery1'].rotation}>
-            <Text
-              fontSize={20}
-              outlineWidth={'5%'}
-              outlineColor='#000000'
-              outlineOpacity={1}
-              anchorX={textObj['left_pulmonary_artery1'].align}
-              anchorY='middle'>
-              {`${
-                textObj['left_pulmonary_artery1'].number
-                  ? textObj['left_pulmonary_artery1'].numberVal
-                  : textObj['left_pulmonary_artery1'].text
-              }`}
-            </Text>
-          </Billboard>
-        )}
-        {textObj['left_pulmonary_artery2'].display && (
-          <Billboard
-            follow={true}
-            position={textObj['left_pulmonary_artery2'].position}
-            lockX={true}
-            lockY={true}
-            lockZ={true}
-            rotation={textObj['left_pulmonary_artery2'].rotation}>
-            <Text
-              fontSize={20}
-              outlineWidth={'5%'}
-              outlineColor='#000000'
-              outlineOpacity={2}
-              anchorX={textObj['left_pulmonary_artery2'].align}
-              anchorY='middle'>
-              {`${
-                textObj['left_pulmonary_artery2'].number
-                  ? textObj['left_pulmonary_artery2'].numberVal
-                  : textObj['left_pulmonary_artery2'].text
-              }`}
-            </Text>
-          </Billboard>
-        )}
-        {textObj['inferior_vena_cava'].display && (
-          <Billboard
-            follow={true}
-            position={textObj['inferior_vena_cava'].position}
-            lockX={true}
-            lockY={true}
-            lockZ={true}
-            rotation={textObj['inferior_vena_cava'].rotation}>
-            <Text
-              fontSize={20}
-              outlineWidth={'5%'}
-              outlineColor='#000000'
-              outlineOpacity={2}
-              anchorX={textObj['inferior_vena_cava'].align}
-              anchorY='middle'>
-              {`${
-                textObj['inferior_vena_cava'].number
-                  ? textObj['inferior_vena_cava'].numberVal
-                  : textObj['inferior_vena_cava'].text
-              }`}
-            </Text>
-          </Billboard>
-        )}
+        {textObj['left_atrium'].display && addLabel('left_atrium')}
+        {textObj['left_pulmonary_artery1'].display && addLabel('left_pulmonary_artery1')}
+        {textObj['left_pulmonary_artery2'].display && addLabel('left_pulmonary_artery2')}
+        {textObj['inferior_vena_cava'].display && addLabel('inferior_vena_cava')}
+        {textObj['right_atrium'].display && addLabel('right_atrium')}
+        {textObj['superior_vena_cava'].display && addLabel('superior_vena_cava')}
+        {textObj['right_pulmonary_vein1'].display && addLabel('right_pulmonary_vein1')}
+        {textObj['right_pulmonary_vein2'].display && addLabel('right_pulmonary_vein2')}
       </group>
       {/* TopPart ---> */}
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>
@@ -200,29 +95,11 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
           geometry={nodes['heart_03_Material_#57_0'].geometry}
           material={nodes['heart_03_Material_#57_0'].material}
         />
-        {textObj['left_pulmonary_artery1'].display && (
-          <Billboard
-            follow={true}
-            position={textObj['left_pulmonary_artery1'].position}
-            lockX={true}
-            lockY={true}
-            lockZ={true}
-            rotation={textObj['left_pulmonary_artery1'].rotation}>
-            <Text
-              fontSize={20}
-              outlineWidth={'5%'}
-              outlineColor='#000000'
-              outlineOpacity={1}
-              anchorX={textObj['left_pulmonary_artery1'].align}
-              anchorY='middle'>
-              {`${
-                textObj['left_pulmonary_artery1'].number
-                  ? textObj['left_pulmonary_artery1'].numberVal
-                  : textObj['left_pulmonary_artery1'].text
-              }`}
-            </Text>
-          </Billboard>
-        )}
+        {textObj['left_pulmonary_artery1'].display && addLabel('left_pulmonary_artery1')}
+        {textObj['brachiocephalic_trunk'].display && addLabel('brachiocephalic_trunk')}
+        {textObj['left_subclavian_artery'].display && addLabel('left_subclavian_artery')}
+        {textObj['left_common_carotid_artery'].display && addLabel('left_common_carotid_artery')}
+        {textObj['aortic_arch'].display && addLabel('aortic_arch')}
       </group>
     </group>
   );
