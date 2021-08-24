@@ -87,6 +87,8 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
         {textObj['superior_vena_cava'].display && addLabel('superior_vena_cava')}
         {textObj['right_pulmonary_vein1'].display && addLabel('right_pulmonary_vein1')}
         {textObj['right_pulmonary_vein2'].display && addLabel('right_pulmonary_vein2')}
+        {textObj['right_pulmonary_artery'].display && addLabel('right_pulmonary_artery')}
+        {textObj['left_pulmonary_artery'].display && addLabel('left_pulmonary_artery')}
       </group>
       {/* TopPart ---> */}
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>

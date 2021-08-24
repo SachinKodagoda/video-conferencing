@@ -24,7 +24,7 @@ const ThreeWorld = (): JSX.Element => {
       align: 'left',
     },
     left_pulmonary_artery1: {
-      text: '<--Left pulmonary veins',
+      text: '<--Superior left pulmonary veins',
       position: [40, 60, -120],
       rotation: [0, -300, 0],
       display: displayAll || false,
@@ -33,7 +33,7 @@ const ThreeWorld = (): JSX.Element => {
       align: 'left',
     },
     left_pulmonary_artery2: {
-      text: '<--Left pulmonary veins',
+      text: '<--Inferior left pulmonary veins',
       position: [0, 30, -140],
       rotation: [0, -300, 0],
       display: displayAll || false,
@@ -77,24 +77,7 @@ const ThreeWorld = (): JSX.Element => {
       numberVal: '(6)-->',
       align: 'right',
     },
-    left_pulmonary_artery: {
-      text: '<--Left pulmonary artery',
-      position: [110, 30, 10],
-      rotation: [0, -300, 0],
-      display: displayAll || false,
-      number: displayAllNumbers || false,
-      numberVal: '<--(15)',
-      align: 'left',
-    },
-    right_pulmonary_artery: {
-      text: 'Right pulmonary artery-->',
-      position: [110, 30, 10],
-      rotation: [0, -300, 0],
-      display: displayAll || false,
-      number: displayAllNumbers || false,
-      numberVal: '(16)-->',
-      align: 'right',
-    },
+
     left_cardiac_vain: {
       text: '<--Left cardiac vain',
       position: [110, -50, -60],
@@ -150,7 +133,7 @@ const ThreeWorld = (): JSX.Element => {
       align: 'right',
     },
     right_pulmonary_vein1: {
-      text: 'Right pulmonary vein-->',
+      text: 'Inferior right pulmonary vein-->',
       position: [-70, -10, 120],
       rotation: [0, -300, 0],
       display: displayAll || false,
@@ -159,7 +142,7 @@ const ThreeWorld = (): JSX.Element => {
       align: 'right',
     },
     right_pulmonary_vein2: {
-      text: 'Right pulmonary vein-->',
+      text: 'Superior Right pulmonary vein-->',
       position: [-60, 24, 130],
       rotation: [0, -300, 0],
       display: displayAll || false,
@@ -184,6 +167,24 @@ const ThreeWorld = (): JSX.Element => {
       number: displayAllNumbers || false,
       numberVal: '(15)-->',
       align: 'right',
+    },
+    right_pulmonary_artery: {
+      text: 'Right pulmonary artery-->',
+      position: [-54, 65, 120],
+      rotation: [0, -300, 0],
+      display: displayAll || false,
+      number: displayAllNumbers || false,
+      numberVal: '(16)-->',
+      align: 'right',
+    },
+    left_pulmonary_artery: {
+      text: '<--Left pulmonary artery',
+      position: [-10, 80, -100],
+      rotation: [0, -300, 0],
+      display: displayAll || false,
+      number: displayAllNumbers || false,
+      numberVal: '<--(17)',
+      align: 'left',
     },
   };
   return (
