@@ -64,11 +64,11 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
           morphTargetDictionary={nodes['0'].morphTargetDictionary}
           morphTargetInfluences={nodes['0'].morphTargetInfluences}
         />
-        {textObj['right_coronary_artery'].display && addLabel('right_coronary_artery')}
-        {textObj['left_ventricle'].display && addLabel('left_ventricle')}
-        {textObj['left_cardiac_vain'].display && addLabel('left_cardiac_vain')}
-        {textObj['pulmonary_trunk'].display && addLabel('pulmonary_trunk')}
-        {textObj['right_ventricle'].display && addLabel('right_ventricle')}
+        {textObj['right_coronary_artery']?.display && addLabel('right_coronary_artery')}
+        {textObj['left_ventricle']?.display && addLabel('left_ventricle')}
+        {textObj['left_cardiac_vain']?.display && addLabel('left_cardiac_vain')}
+        {textObj['pulmonary_trunk']?.display && addLabel('pulmonary_trunk')}
+        {textObj['right_ventricle']?.display && addLabel('right_ventricle')}
       </group>
       {/* Neck Part ---> */}
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>
@@ -79,16 +79,16 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
           morphTargetDictionary={nodes['1'].morphTargetDictionary}
           morphTargetInfluences={nodes['1'].morphTargetInfluences}
         />
-        {textObj['left_atrium'].display && addLabel('left_atrium')}
-        {textObj['left_pulmonary_artery1'].display && addLabel('left_pulmonary_artery1')}
-        {textObj['left_pulmonary_artery2'].display && addLabel('left_pulmonary_artery2')}
-        {textObj['inferior_vena_cava'].display && addLabel('inferior_vena_cava')}
-        {textObj['right_atrium'].display && addLabel('right_atrium')}
-        {textObj['superior_vena_cava'].display && addLabel('superior_vena_cava')}
-        {textObj['right_pulmonary_vein1'].display && addLabel('right_pulmonary_vein1')}
-        {textObj['right_pulmonary_vein2'].display && addLabel('right_pulmonary_vein2')}
-        {textObj['right_pulmonary_artery'].display && addLabel('right_pulmonary_artery')}
-        {textObj['left_pulmonary_artery'].display && addLabel('left_pulmonary_artery')}
+        {textObj['left_atrium']?.display && addLabel('left_atrium')}
+        {textObj['left_pulmonary_artery1']?.display && addLabel('left_pulmonary_artery1')}
+        {textObj['left_pulmonary_artery2']?.display && addLabel('left_pulmonary_artery2')}
+        {textObj['inferior_vena_cava']?.display && addLabel('inferior_vena_cava')}
+        {textObj['right_atrium']?.display && addLabel('right_atrium')}
+        {textObj['superior_vena_cava']?.display && addLabel('superior_vena_cava')}
+        {textObj['right_pulmonary_vein1']?.display && addLabel('right_pulmonary_vein1')}
+        {textObj['right_pulmonary_vein2']?.display && addLabel('right_pulmonary_vein2')}
+        {textObj['right_pulmonary_artery']?.display && addLabel('right_pulmonary_artery')}
+        {textObj['left_pulmonary_artery']?.display && addLabel('left_pulmonary_artery')}
       </group>
       {/* TopPart ---> */}
       <group rotation={[rotateX, rotateY, rotateZ]} scale={0.2}>
@@ -97,11 +97,11 @@ const Heart = ({ rotateZ, rotateX, rotateY, scale, position, textObj }: TProps):
           geometry={nodes['heart_03_Material_#57_0'].geometry}
           material={nodes['heart_03_Material_#57_0'].material}
         />
-        {textObj['left_pulmonary_artery1'].display && addLabel('left_pulmonary_artery1')}
-        {textObj['brachiocephalic_trunk'].display && addLabel('brachiocephalic_trunk')}
-        {textObj['left_subclavian_artery'].display && addLabel('left_subclavian_artery')}
-        {textObj['left_common_carotid_artery'].display && addLabel('left_common_carotid_artery')}
-        {textObj['aortic_arch'].display && addLabel('aortic_arch')}
+        {textObj['left_pulmonary_artery1']?.display && addLabel('left_pulmonary_artery1')}
+        {textObj['brachiocephalic_trunk']?.display && addLabel('brachiocephalic_trunk')}
+        {textObj['left_subclavian_artery']?.display && addLabel('left_subclavian_artery')}
+        {textObj['left_common_carotid_artery']?.display && addLabel('left_common_carotid_artery')}
+        {textObj['aortic_arch']?.display && addLabel('aortic_arch')}
       </group>
     </group>
   );
