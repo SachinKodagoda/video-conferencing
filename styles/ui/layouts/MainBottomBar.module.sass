@@ -55,14 +55,80 @@
 .disabled
     cursor: not-allowed
 
-.popupMenu
-    width: 300px
-    height: 600px
-    position: absolute
-    top: -10px
-    left: 0
-    background: #888
-    transform: translateY(-100%)
-
 .popupMenuCover
     position: relative
+
+.itemRow
+    display: flex
+    align-items: center
+    padding: 6px 12px
+    background: $gray2
+    margin-bottom: 6px
+    border-radius: 4px
+    font-weight: 400
+
+.popupMenu
+    overflow-y: auto
+    width: max-content
+    border-radius: 10px
+    height: 500px
+    position: absolute
+    top: -20px
+    left: -20px
+    background: $black3
+    transform: translateY(-100%)
+    padding: 12px
+    border: 2px solid $black1
+    -ms-overflow-style: none
+    scrollbar-width: none
+    cursor: pointer
+    &::-webkit-scrollbar
+        display: none
+
+.hide
+    display: none
+
+.selectBox
+    margin-right: 6px
+
+.checkIcon
+    width: 20px
+    height: 20px
+    display: none
+
+.selected
+    display: block
+
+.popupMenuMainIcons
+    display: flex
+    column-gap: 10px
+
+.popupMenuMainIconsRow
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 6px 12px
+    color: $white
+    background: $black3
+    margin-bottom: 6px
+    border-radius: 4px
+    font-weight: 400
+    flex-grow: 1
+    min-width: 180px
+    border: 1px solid #ccc
+
+.selectNumber
+    margin-right: 6px
+    color: $black1
+    width: 20px
+    height: 20px
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 100%
+    border: 2px solid $black1
+
+.selectNumberActive
+    background: $dark_red
+    color: $white
+    border: none

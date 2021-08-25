@@ -1,9 +1,11 @@
 import { AnimationContext } from '@ctx/AnimationContext';
 import { AudioContext } from '@ctx/AudioContext';
+import useOnClickOutside from '@hooks/useOnClickOutside';
 import styles from '@layouts_style/MainBottomBar.module.sass';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 
+// Types 🔥🔥🔥🔥
 type TProps = {
   videoOn: boolean;
   showLeftBar: boolean;
@@ -12,6 +14,7 @@ type TProps = {
   setShowLeftBar: (x: boolean) => void;
   setShowRightBar: (x: boolean) => void;
 };
+
 const MainBottomBar = ({
   setShowLeftBar,
   setShowRightBar,
@@ -20,12 +23,23 @@ const MainBottomBar = ({
   showRightBar,
   videoOn,
 }: TProps): JSX.Element => {
+  // Get context data 🔥🔥🔥🔥
+  const { isMicDisabled, microphoneOn, setMicrophoneOn } = useContext(AudioContext);
+  const { setAction, action, followHand, setFollowHand, textObj, setTextObj, displayAll, setDisplayAll } =
+    useContext(AnimationContext);
+
+  // Using useState hooks  🔥🔥🔥🔥
   const [threeMenuOn, setThreeMenuOn] = useState(false);
   const [settingsMenuOn, setSettingsMenuOn] = useState(false);
   const [streaming, setStreaming] = useState(false);
-  const { isMicDisabled, microphoneOn, setMicrophoneOn } = useContext(AudioContext);
-  const { setAction, action, followHand, setFollowHand, textObj } = useContext(AnimationContext);
 
+  // Using useRef hooks  🔥🔥🔥🔥
+  const popupMenu = useRef<HTMLDivElement | null>(null);
+
+  // Using custom hooks  🔥🔥🔥🔥
+  useOnClickOutside(popupMenu, () => setSettingsMenuOn(false));
+
+  // Setting Images 🔥🔥🔥🔥
   const videoIcon = videoOn ? 'videoCameraActive' : 'videoCamera';
   const streamingIcon = streaming ? 'streamingActive' : 'streaming';
   const microphoneIcon = microphoneOn ? 'microphoneActive' : 'microphone';
@@ -35,31 +49,132 @@ const MainBottomBar = ({
   const messageIcon = showRightBar ? 'messageActive' : 'message';
   const TrackingIcon = action ? 'actionActive' : 'action';
   const AnimateIcon = followHand ? 'handActive' : 'hand';
+
+  // JSX Element 🔥🔥🔥🔥
   return (
     <div className={styles.bottomBar}>
+      {/* 🔥🔥🔥🔥 --Left Buttons-- 🔥🔥🔥🔥 */}
       <div className={styles.left}>
-        <span className={styles.popupMenuCover}>
-          <div className={styles.popupMenu}>
+        <div className={styles.popupMenuCover} ref={popupMenu}>
+          <div className={settingsMenuOn ? `${styles.popupMenu}` : `${styles.popupMenu} ${styles.hide}`}>
+            <div className={styles.popupMenuMainIcons}>
+              <div
+                className={`${styles.popupMenuMainIconsRow}`}
+                onClick={() => {
+                  const tempDisplay = !displayAll;
+                  const tempObj = Object.keys(textObj).reduce(
+                    (attrs, key) => ({
+                      ...attrs,
+                      [key]: { ...textObj[key], number: true, display: true },
+                    }),
+                    {}
+                  );
+                  setTextObj(tempObj);
+                  setDisplayAll(tempDisplay);
+                }}>
+                Show all
+              </div>
+              <div
+                className={`${styles.popupMenuMainIconsRow}`}
+                onClick={() => {
+                  const tempDisplay = !displayAll;
+                  const tempObj = Object.keys(textObj).reduce(
+                    (attrs, key) => ({
+                      ...attrs,
+                      [key]: { ...textObj[key], number: false, display: false },
+                    }),
+                    {}
+                  );
+                  setTextObj(tempObj);
+                  setDisplayAll(tempDisplay);
+                }}>
+                Hide all
+              </div>
+            </div>
+            <div className={styles.popupMenuMainIcons}>
+              <div
+                className={`${styles.popupMenuMainIconsRow}`}
+                onClick={() => {
+                  const tempDisplay = !displayAll;
+                  const tempObj = Object.keys(textObj).reduce(
+                    (attrs, key) => ({
+                      ...attrs,
+                      [key]: { ...textObj[key], number: true, display: true },
+                    }),
+                    {}
+                  );
+                  setTextObj(tempObj);
+                  setDisplayAll(tempDisplay);
+                }}>
+                Show all numbers
+              </div>
+              <div
+                className={`${styles.popupMenuMainIconsRow}`}
+                onClick={() => {
+                  const tempDisplay = !displayAll;
+                  const tempObj = Object.keys(textObj).reduce(
+                    (attrs, key) => ({
+                      ...attrs,
+                      [key]: { ...textObj[key], number: false, display: true },
+                    }),
+                    {}
+                  );
+                  setTextObj(tempObj);
+                  setDisplayAll(tempDisplay);
+                }}>
+                Show all text
+              </div>
+            </div>
             {Object.entries(textObj).map((item, i) => {
-              return <div key={`SelectionRow-${i + 1}`}>{item[1].text}</div>;
+              return (
+                <div key={`SelectionRow-${i + 1}`} className={styles.itemRow}>
+                  <div
+                    className={
+                      item[1].number ? `${styles.selectNumber} ${styles.selectNumberActive}` : `${styles.selectNumber}`
+                    }
+                    onClick={() => {
+                      setTextObj(obj => {
+                        return { ...obj, [item[0]]: { ...item[1], number: !item[1].number } };
+                      });
+                    }}>
+                    {i + 1}
+                  </div>
+                  <div
+                    className={`${styles.selectBox}`}
+                    onClick={() => {
+                      setTextObj(obj => {
+                        return { ...obj, [item[0]]: { ...item[1], display: !item[1].display } };
+                      });
+                    }}>
+                    <img
+                      src={`/images/checked.svg`}
+                      alt='check'
+                      className={item[1].display ? `${styles.checkIcon} ${styles.selected}` : `${styles.checkIcon}`}
+                    />
+                    <img
+                      src={`/images/not_checked.svg`}
+                      alt='check'
+                      className={item[1].display ? `${styles.checkIcon}` : `${styles.checkIcon} ${styles.selected}`}
+                    />
+                  </div>
+                  {item[1].text}
+                </div>
+              );
             })}
           </div>
           <img
             src={`/images/${settingsMenuIcon}.svg`}
-            alt=''
+            alt='Settings'
             className={styles.leftIcons}
-            onMouseEnter={() => {
-              setSettingsMenuOn(true);
-            }}
-            onMouseLeave={() => {
-              setSettingsMenuOn(false);
+            onClick={() => {
+              setSettingsMenuOn(value => !value);
             }}
             aria-hidden='true'
           />
-        </span>
+        </div>
         <img
           src={`/images/${threeMenuIcon}.svg`}
-          alt=''
+          alt='ThreeMenuIcon'
           className={styles.leftIcons}
           onMouseEnter={() => {
             setThreeMenuOn(true);
@@ -69,10 +184,11 @@ const MainBottomBar = ({
           }}
         />
       </div>
+      {/* 🔥🔥🔥🔥 --Middle Buttons-- 🔥🔥🔥🔥 */}
       <div className={styles.middle}>
         <img
           src={`/images/${videoIcon}.svg`}
-          alt=''
+          alt='Video'
           className={styles.middleIcons}
           onClick={() => {
             const tempState = videoOn;
@@ -82,7 +198,7 @@ const MainBottomBar = ({
         />
         <img
           src={`/images/${TrackingIcon}.svg`}
-          alt=''
+          alt='StartHandTracking'
           className={styles.middleIcons}
           onClick={() => {
             // Start Tracking
@@ -92,7 +208,7 @@ const MainBottomBar = ({
         />
         <img
           src={`/images/${streamingIcon}.svg`}
-          alt=''
+          alt='Streaming'
           className={styles.middleIcons}
           onClick={() => {
             setStreaming(!streaming);
@@ -102,7 +218,7 @@ const MainBottomBar = ({
         />
         <img
           src={`/images/${AnimateIcon}.svg`}
-          alt=''
+          alt='FollowHand'
           className={styles.middleIcons}
           onClick={() => {
             // Start animation
@@ -112,7 +228,7 @@ const MainBottomBar = ({
         />
         <img
           src={`/images/${microphoneIcon}.svg`}
-          alt=''
+          alt='Microphone'
           className={`${styles.middleIcons} ${isMicDisabled ? styles.disabled : ''}`}
           onClick={() => {
             if (!isMicDisabled) {
@@ -122,10 +238,11 @@ const MainBottomBar = ({
           aria-hidden='true'
         />
       </div>
+      {/* 🔥🔥🔥🔥 --Right Buttons-- 🔥🔥🔥🔥 */}
       <div className={styles.right}>
         <img
           src={`/images/${usersIcon}.svg`}
-          alt=''
+          alt='users'
           className={styles.rightIcons}
           onClick={() => {
             setShowLeftBar(!showLeftBar);
@@ -134,7 +251,7 @@ const MainBottomBar = ({
         />
         <img
           src={`/images/${messageIcon}.svg`}
-          alt=''
+          alt='messages'
           className={styles.rightIcons}
           onClick={() => {
             setShowRightBar(!showRightBar);
